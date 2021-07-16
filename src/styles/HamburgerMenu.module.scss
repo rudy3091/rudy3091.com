@@ -1,0 +1,47 @@
+@use "./colors.scss" as colors;
+
+$menu-width: 25vw;
+
+.container {
+	padding-top: calc(80px + 20px);
+	padding-left: 50px;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	position: fixed;
+	left: 0;
+	top: 0;
+	transition: left 0.3s ease-in-out;
+	display: flex;
+
+	&.hidden {
+		left: -100%;
+	}
+
+	.opaque {
+		width: $menu-width;
+		height: 100%;
+		// backdrop-filter: blur(3px); /* check performance before use */
+
+		.tag {
+			display: flex;
+			margin-top: 10px;
+			margin-bottom: 10px;
+
+			& span {
+				cursor: pointer;
+				font-size: 1.2rem;
+				word-break: break-all;
+
+				&::before {
+					content: "#";
+				}
+			}
+		}
+	}
+
+	.margin {
+		width: calc(100vw - #{$menu-width});
+		height: 100%;
+	}
+}
