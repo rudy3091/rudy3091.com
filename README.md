@@ -2,7 +2,7 @@
 
 This repository is for building webpage about me.
 
-Built with [Next.js](https://nextjs.org/) and can be changed to anything in any time.
+Built with [gatsby](https://www.gatsbyjs.com/) and can be changed to anything in any time.
 
 Contents will be published mainly in Korean, my first language.
 
