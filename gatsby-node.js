@@ -28,7 +28,7 @@ exports.createPages = async function ({ actions, graphql }) {
     const next = edge.next?.frontmatter.slug;
     actions.createPage({
       path: slug,
-      component: require.resolve(`./src/components/post.js`),
+      component: require.resolve(`./src/components/post.tsx`),
       context: { slug, next, prev },
     });
   });
