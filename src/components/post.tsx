@@ -1,21 +1,24 @@
 import React from "react";
+import Layout from "./layout";
 import { graphql, Link, PageProps } from "gatsby";
 
 export default function Template(props: PageProps) {
   const { markdownRemark }: any = props.data;
   const { frontmatter, html } = markdownRemark;
   return (
-    <div className="blog-post-container">
-      <div className="blog-post">
-        <h1>{frontmatter.title}</h1>
-        <h2>{frontmatter.date}</h2>
-        <div
-          className="blog-post-content"
-          dangerouslySetInnerHTML={{ __html: html }}
-        />
+    <Layout>
+      <div className="blog-post-container">
+        <div className="blog-post">
+          <h1>{frontmatter.title}</h1>
+          <h2>{frontmatter.date}</h2>
+          <div
+            className="blog-post-content"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        </div>
+        <Link to={(props.pageContext as any).next}>next post</Link>
       </div>
-      <Link to={(props.pageContext as any).next}>next post</Link>
-    </div>
+    </Layout>
   );
 }
 
