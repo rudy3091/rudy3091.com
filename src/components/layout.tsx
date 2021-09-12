@@ -37,7 +37,7 @@ const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
           <nav
             style={{
               height: `50px`,
-              backgroundColor: `#d4a3b2`,
+              backgroundColor: `#e74c3c`,
             }}
           ></nav>
         </header>
