@@ -4,14 +4,12 @@ import { Link } from "gatsby";
 
 const IndexPage = () => {
   return (
-    <>
-      <Layout>
-        <main>
-          <div>hello world</div>
-          <Link to="/test">go to test page</Link>
-        </main>
-      </Layout>
-    </>
+    <Layout>
+      <main>
+        <div>hello world</div>
+        <Link to="/test">go to test page</Link>
+      </main>
+    </Layout>
   );
 };
 
