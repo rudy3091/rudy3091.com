@@ -2,7 +2,7 @@ import React from "react";
 import { graphql, Link, PageProps } from "gatsby";
 
 export default function Template(props: PageProps) {
-  const { markdownRemark } = props.data;
+  const { markdownRemark }: any = props.data;
   const { frontmatter, html } = markdownRemark;
   return (
     <div className="blog-post-container">
@@ -14,7 +14,7 @@ export default function Template(props: PageProps) {
           dangerouslySetInnerHTML={{ __html: html }}
         />
       </div>
-      <Link to={props.pageContext.next}>next post</Link>
+      <Link to={(props.pageContext as any).next}>next post</Link>
     </div>
   );
 }
