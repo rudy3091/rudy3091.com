@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import PropTypes from "prop-types";
 import { useStaticQuery, graphql, PageProps } from "gatsby";
 
 const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
@@ -46,10 +45,6 @@ const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
       </div>
     </>
   );
-};
-
-Layout.propTypes = {
-  children: PropTypes.node.isRequired,
 };
 
 export default Layout;
