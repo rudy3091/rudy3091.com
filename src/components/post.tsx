@@ -16,7 +16,6 @@ export default function Template(props: PageProps) {
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>
-        <Link to={(props.pageContext as any).next}>next post</Link>
       </div>
     </Layout>
   );
