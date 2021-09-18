@@ -14,17 +14,17 @@ slug: post/var-let-const
 
 var은 ES2015 이전에 사용되던 변수 선언 키워드이다. [ES5 스펙](https://262.ecma-international.org/5.1/#sec-12.2)은 아래와 같다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled.png)
+![Untitled](./Untitled.png)
 
 뭔지는 모르겠지만 ES5 스펙 명세에서 사용될 용어를 정의하는 것 같다. opt는 optional로 있어도 되고, 없어도 된다는 의미인 듯 하다.
 
 다음 버전인 [ES6 스펙](https://262.ecma-international.org/6.0/#sec-declarations-and-the-variable-statement)(이하 스펙)은 아래와 같다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%201.png)
+![Untitled](Untitled1.png)
 
 이것도 잘은 모르겠지만 let과 const 키워드는 확실히 알아볼 수 있다. var 키워드로 변수를 선언하는 것은 *VariableStatement*, let/const 키워드로 변수를 선언하는것은 *LexicalDeclaration*이라 부르는 것 같다. 중요한 것은 다음 문구이다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%202.png)
+![Untitled](Untitled2.png)
 
 > let 과 const 변수선언은 실행중인 실행 컨텍스트의 렉시컬 환경 스코프를 가지는 변수들을 정의한다. 변수들은 그들을 포함하는 렉시컬 환경이 인스턴스화 되었을 때 생성되지만, 변수의 렉시컬 바인딩이 평가되기 전까지는 어떠한 방법으로도 접근할 수 없다. Initializer와 렉시컬 바인딩에 의해 정의된 변수는 변수가 생성될 때가 아니라,  렉시컬 바인딩이 평가될 때에 Initializer의 AssignmentExpression 값이 할당 된다. 만약 let 변수 선언의 렉시컬 바인딩이 Initializer를 가지지 않는다면 렉시컬 바인딩이 평가될 때 undefined 값이 할당되게 된다.
 
@@ -44,15 +44,15 @@ ES6 스펙 명세: [https://262.ecma-international.org/6.0/#sec-lexical-environm
 
 요약하자면, 렉시컬 환경은 코드상에서 정의된 식별자와 값을 기록하는 객체라고 할 수 있다. 그러니까 어떤 함수가 어떤 이름으로 선언되어있고, 어떤 변수가 어떤 값을 가지는 지에 대한 데이터 덩어리이다. 렉시컬 환경은 값이 기록된 `Environment Record`와 `outer`라는 또다른 렉시컬 환경을 가리키는 포인터로 구성된다고 한다. 특히 이 중 outer 포인터는 스코프가 중첩되어 있을 때 스코프 체인을 구성하고 이를 탐색하기 위해 사용된다고 한다. 여기서 말하는 `스코프`는 `FunctionDeclaration`, `BlockStatement`, `Catch clause of TryStatement`가 평가(Evaluate) 될때마다 새롭게 생성된다고 한다. 그러니까, ES6에서의 **렉시컬 환경은 Function-Scoped 가 아닌 Block-Scoped** 이라는 의미이다. 아래가 스펙상의 그 내용이다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%203.png)
+![Untitled](Untitled3.png)
 
 참고로 ES5 스펙에서는 같은 부분을 `FunctionDeclaration`, `WithStatement`, `Catch clause of a TryStatement`로 정의한다. ES6과 비교했을 때 `BlockStatement`대신 `WithStatement`가 있다. WithStatement는 ES5에서도 사용을 권장하지 않을 만큼 불안정한 기능이라고 하니 딱히 알아보진 않았다([참고](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/with)). 여기서 `var`키워드와 `let`, `const`키워드의 차이점이 나타난다. 이 차이점은 TDZ: Temporal Dead Zone 문단에서 간단히 짚어보겠다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%204.png)
+![Untitled](Untitled4.png)
 
 또한 렉시컬 환경에 관한 정보는 스펙 명세서에만 존재하고, 실제 코드에서 이 정보들에 접근하는 것은 불가능하다고 한다. 실제로 구현된 내용을 보기 위해 v8 엔진 소스를 뒤져봤다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%205.png)
+![Untitled](Untitled5.png)
 
 뭔가 있긴 있다. 대충 알아보니, `hydrogen` 이란 녀석은 v8 엔진의 `Crankshaft`가 자바스크립트 AST를 high-level static single-assignment 라는 것으로 번역한 구조라고 한다([출처](https://blog.sessionstack.com/how-javascript-works-inside-the-v8-engine-5-tips-on-how-to-write-optimized-code-ac089e62b12e)). AST는 트리 형태니 수소 결합 뭐 이런 뉘앙스의 네이밍인것 같다 (이보다 더 로우레벨에 lithium 이라는 녀석이 있다고 한다. 뭐 수소 여러개 이런 의미인가?). 아무튼 AST와 관련된 내용이니 이 코드가 렉시컬 환경이라는 개념을 구현한 내용이 맞지 않나 싶다. 중요한 내용은 아니라 더 자세히 알아보진 않았다.
 
@@ -78,11 +78,11 @@ ES6 스펙 명세: [https://262.ecma-international.org/6.0/#sec-lexical-environm
 
 > Var 키워드로 선언된 변수는 그들의 렉시컬 환경이 인스턴스화 되었을 때 생성되고 생성된 시점에 undefined로 초기화된다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%206.png)
+![Untitled](Untitled6.png)
 
 따라서 변수 선언문 이전에 변수에 접근해도 undefined가 나올 뿐 에러가 발생되지 않는다. 이것을 우리는 호이스팅이라고 부른다. 참고로 ES5 스펙에는 호이스팅이라는 용어가 사용된 적은 없다. 다만 **변수가 생성되었을 때에는 undefined로 초기화되고, *VariableStatement*가 실행되면 그 *AssignmentExpression*값이 할당된다** 고 정의하고 있다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%207.png)
+![Untitled](Untitled7.png)
 
 ## var
 
@@ -183,7 +183,7 @@ for (var i = 0; i < 10; i++) {
 
 let과 const의 경우는 좀 다르다. 위의 *변수 선언 단계*의 1번과 2번 단계가 분리되어 실행된다. 이 역시 스펙에 정의되어 있는 것 같다(이 부분인지 확실하지 않음).
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%208.png)
+![Untitled](Untitled8.png)
 
 따라서 변수들이 Variable Object에 등록은 되어있지만 메모리에 아직 올라와 있지 않은 영역이 1번 단계와 2번 단계 사이에 존재한다. 이 영역에서 변수에 접근하려 하면 아래 코드와 같이 에러가 발생한다. 이 1번과 2번 단계 사이의 영역을 `Temporal Dead Zone`이라고 부른다.
 
@@ -220,15 +220,15 @@ f();
 
 ES5 스펙: 선언된 변수와 함수가 *VariableEnvironment*의 *Environment Record*에 추가된다고 써있다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%209.png)
+![Untitled](Untitled9.png)
 
 ES6 스펙: *VariableEnvironment*는 *VariableStatement*로 바인딩된 변수들을 가진다고 써있다(이 포스트의 가장 첫 번째 사진에서 볼 수 있듯 *VariableStatements*는 var 키워드를 사용한 변수선언을 의미한다).
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%2010.png)
+![Untitled](Untitled10.png)
 
 또한 let과 const 키워드로 선언한 변수는 var 키워드로 선언한 변수와 다르게 재선언이 불가능하며, 이미 선언된 변수와 같은 이름으로 직접적으로 global 바인딩을 해주면 shadowing될 수 있다고 한다. 해당 내용은 스펙 문서에 아래와 같이 정의되어 있다.
 
-![Untitled](var,%20let,%20const%200650014ffcdb45e79255b54fb8e8e7cf/Untitled%2011.png)
+![Untitled](Untitled11.png)
 
 ## 결론
 
