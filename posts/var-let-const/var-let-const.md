@@ -1,7 +1,7 @@
 ---
 title: var, let, const
 author: 김현민 @rudy3091
-slug: post/var-let-const
+slug: posts/var-let-const
 ---
 
 # var, let, const
