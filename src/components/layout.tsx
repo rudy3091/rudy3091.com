@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
 import { useStaticQuery, graphql, PageProps } from "gatsby";
+import Logo from "./atoms/Logo";
 
 const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
   const data = useStaticQuery(graphql`
@@ -38,7 +39,9 @@ const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
               height: `50px`,
               backgroundColor: `#e74c3c`,
             }}
-          ></nav>
+          >
+            <Logo routeHome></Logo>
+          </nav>
         </header>
         <main>{children}</main>
         <footer></footer>
