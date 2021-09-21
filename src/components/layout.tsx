@@ -1,7 +1,24 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
+import styled from "styled-components";
 import { useStaticQuery, graphql, PageProps } from "gatsby";
 import Logo from "./atoms/Logo";
+
+const MainContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Nav = styled.nav`
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100%;
+  height: 50px;
+  backdrop-filter: blur(5px);
+`;
 
 const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
   const data = useStaticQuery(graphql`
@@ -21,31 +38,22 @@ const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
         {`
           html,
           body {
-          margin: 0;
-          padding: 0;
+            margin: 0;
+            padding: 0;
           }
         `}
       </style>
-      <div
-        style={{
-          margin: `0 auto`,
-          maxWidth: 960,
-          padding: `0 1.0875rem 1.45rem`,
-        }}
-      >
+      <MainContainer>
         <header>
-          <nav
-            style={{
-              height: `50px`,
-              backgroundColor: `#e74c3c`,
-            }}
-          >
+          <Nav>
             <Logo routeHome></Logo>
-          </nav>
+          </Nav>
         </header>
-        <main>{children}</main>
+        <main style={{ paddingTop: `50px`, maxWidth: `960px`, width: `100%` }}>
+          {children}
+        </main>
         <footer></footer>
-      </div>
+      </MainContainer>
     </>
   );
 };
