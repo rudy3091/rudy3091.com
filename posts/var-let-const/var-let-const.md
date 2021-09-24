@@ -1,10 +1,9 @@
 ---
 title: var, let, const
 author: 김현민 @rudy3091
+date: 2021-09-14
 slug: posts/var-let-const
 ---
-
-# var, let, const
 
 ## 들어가기 전에
 
