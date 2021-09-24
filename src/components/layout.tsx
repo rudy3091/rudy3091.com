@@ -17,7 +17,9 @@ const Nav = styled.nav`
 
   width: 100%;
   height: 50px;
-  backdrop-filter: blur(5px);
+
+  backdrop-filter: blur(10px);
+  z-index: 9;
 `;
 
 const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
