@@ -1,25 +1,43 @@
-import React from "react";
-import Layout from "./layout";
+import * as React from "react";
+import Layout from "../../components/layout";
+import styled from "styled-components";
 import { graphql, Link, PageProps } from "gatsby";
 
-export default function Template(props: PageProps) {
+const PVContainer = styled.div`
+  & a {
+    color: inherit;
+    text-decoration: none;
+
+    display: inline-block;
+    line-height: 0.85;
+    border-bottom: 2px solid #666688aa;
+    transition: border-bottom 0.1s ease-in-out, line-height 0.1s ease-in-out;
+  }
+
+  a:hover {
+    line-height: 0;
+    border-bottom: 8px solid #666688aa;
+  }
+`;
+
+const PostViewPage = (props: PageProps) => {
   const { markdownRemark }: any = props.data;
   const { frontmatter, html } = markdownRemark;
   return (
     <Layout>
-      <div className="blog-post-container">
+      <PVContainer>
         <div className="blog-post">
           <h1>{frontmatter.title}</h1>
-          <h2>{frontmatter.date}</h2>
+          {frontmatter.date ? <h2>{frontmatter.date}</h2> : ""}
           <div
             className="blog-post-content"
             dangerouslySetInnerHTML={{ __html: html }}
           />
         </div>
-      </div>
+      </PVContainer>
     </Layout>
   );
-}
+};
 
 export const pageQuery = graphql`
   query ($slug: String!) {
@@ -33,3 +51,4 @@ export const pageQuery = graphql`
     }
   }
 `;
+export default PostViewPage;
