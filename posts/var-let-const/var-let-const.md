@@ -1,8 +1,8 @@
 ---
-title: var, let, const
-author: 김현민 @rudy3091
-date: 2021-09-14
-slug: posts/var-let-const
+title: "var, let, const"
+author: "김현민 @rudy3091"
+date: "2021-09-14"
+slug: "posts/var-let-const"
 ---
 
 ## 들어가기 전에
@@ -68,8 +68,8 @@ ES6 스펙 명세: [https://262.ecma-international.org/6.0/#sec-lexical-environm
 `호이스팅`은 실행 컨텍스트와 연관지어 이 포스트에서 자세하게는 다루지 않겠다. 하지만 호이스팅을 다루기에 앞서, 변수가 선언되는 방식을 알아볼 필요가 있다. 변수 선언은 `선언 단계`, `초기화 단계`, `할당 단계`의 총 3가지 단계로 구성된다고 한다. 각각이 하는 일을 간단히 알아보면 아래와 같다.
 
 > 1. 선언 단계: 변수를 실행 컨텍스트의 Variable Object에 등록한다.
-2. 초기화 단계: Variable Object에 등록된 변수를 위한 공간을 메모리에 확보한다. 이 단계에서 변수는 undefined로 초기화된다.
-3. 할당 단계: undefined로 초기화된 변수에 실제 값을 할당한다.
+> 2. 초기화 단계: Variable Object에 등록된 변수를 위한 공간을 메모리에 확보한다. 이 단계에서 변수는 undefined로 초기화된다.
+> 3. 할당 단계: undefined로 초기화된 변수에 실제 값을 할당한다.
 
 이때, **var 키워드로 선언된 변수는 1.선언 단계와 2.초기화 단계가 한번에 이루어진다**. 이는 ES6 스펙의 다음 문구에서 알 수 있다.
 
