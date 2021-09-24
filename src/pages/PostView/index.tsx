@@ -5,18 +5,19 @@ import { graphql, Link, PageProps } from "gatsby";
 
 const PVContainer = styled.div`
   & a {
-    color: inherit;
+    color: #888;
     text-decoration: none;
 
     display: inline-block;
     line-height: 0.85;
-    border-bottom: 2px solid #666688aa;
+    border-bottom: 1px solid #666688aa;
     transition: border-bottom 0.1s ease-in-out, line-height 0.1s ease-in-out;
   }
 
   & a:hover {
     line-height: 0;
-    border-bottom: 8px solid #666688aa;
+    color: #333;
+    border-bottom: 8px solid #66668888;
   }
 `;
 
