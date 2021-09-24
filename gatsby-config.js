@@ -1,7 +1,7 @@
 module.exports = {
   pathPrefix: "/rudy3091.me",
   siteMetadata: {
-    siteUrl: "https://www.yourdomain.tld",
+    siteUrl: "https://rudy3091.com",
     title: "rudy3091's page",
   },
   plugins: [
