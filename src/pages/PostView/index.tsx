@@ -14,7 +14,7 @@ const PVContainer = styled.div`
     transition: border-bottom 0.1s ease-in-out, line-height 0.1s ease-in-out;
   }
 
-  a:hover {
+  & a:hover {
     line-height: 0;
     border-bottom: 8px solid #666688aa;
   }
