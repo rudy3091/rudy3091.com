@@ -46,7 +46,7 @@ const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
             <Logo routeHome></Logo>
           </Nav>
         </header>
-        <main style={{ paddingTop: `50px`, maxWidth: `960px`, width: `100%` }}>
+        <main style={{ paddingTop: `50px`, maxWidth: `800px`, width: `100%` }}>
           {children}
         </main>
         <footer></footer>

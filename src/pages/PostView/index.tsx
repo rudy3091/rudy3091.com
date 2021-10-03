@@ -5,10 +5,14 @@ import styled from "styled-components";
 import { graphql, Link, PageProps } from "gatsby";
 
 const PVContainer = styled.div`
+  padding: 1rem;
+  color: #224;
+
   & a {
     color: #889;
     text-decoration: underline;
     text-decoration-color: #66668888;
+    word-break: break-all;
 
     display: inline-block;
     border-bottom: 1px solid transparent;
@@ -21,6 +25,7 @@ const PVContainer = styled.div`
 
   & h1 {
     margin: 2rem 0 1rem 0;
+    font-size: 2rem;
   }
 
   & h2 {
@@ -34,6 +39,38 @@ const PVContainer = styled.div`
   & p {
     margin: 1.5rem 0 0.75rem 0;
     line-height: 2rem;
+  }
+
+  & li {
+    margin: 1rem 0;
+  }
+
+  & code {
+    padding: 0.2rem;
+    border-radius: 4px;
+    background-color: #f0f0ff;
+    color: #86f;
+  }
+
+  & pre {
+    padding: 1.75rem;
+    border-radius: 8px;
+    background-color: #f6f6f6;
+    overflow: scroll;
+
+    & code {
+      padding: 0;
+      background-color: inherit;
+      color: inherit;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  & em {
+    color: #36d;
   }
 `;
 

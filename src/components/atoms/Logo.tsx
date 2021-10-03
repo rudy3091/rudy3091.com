@@ -6,8 +6,6 @@ import SvgLogo from '../../images/logo.svg';
 const LogoContainer = styled.div`
   height: 100%;
 
-  margin-left: 50px;
-
   & > a {
     display: flex;
     align-items: center;
@@ -17,6 +15,10 @@ const LogoContainer = styled.div`
 
     color: inherit;
     text-decoration: none;
+  }
+
+  & img {
+    margin-left: 1rem;
   }
 `
 
