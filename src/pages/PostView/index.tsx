@@ -18,6 +18,23 @@ const PVContainer = styled.div`
   & a:hover {
     color: #334;
   }
+
+  & h1 {
+    margin: 2rem 0 1rem 0;
+  }
+
+  & h2 {
+    margin: 2rem 0 1rem 0;
+  }
+
+  & h3 {
+    margin: 1.5rem 0 0.75rem 0;
+  }
+
+  & p {
+    margin: 1.5rem 0 0.75rem 0;
+    line-height: 2rem;
+  }
 `;
 
 const PostViewPage = (props: PageProps) => {
