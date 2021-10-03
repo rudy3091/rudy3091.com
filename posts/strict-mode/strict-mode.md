@@ -258,7 +258,7 @@ console.log(add(4, 5); // 9
 
 ## 3. Tail call optimization
 
-"use strict"는 파일 또는 함수의 가장 첫번째에 쓰여있어야 한다고 명시되어 있습니다. 이것과 반대되는 개념으로 `tail call` 이라는 개념이 [ES2015 스펙에 명시](https://262.ecma-international.org/6.0/#sec-tail-position-calls)되어 있습니다. 이 개념이 중요한 이유는 `Tail call optimization`이라는 최적화 기법과 관련되어 있기 때문입니다.
+"use strict"는 파일 또는 함수의 가장 첫번째에 쓰여있어야 한다고 명시되어 있습니다. 이것과 반대되는 개념으로 tail call 이라는 개념이 ES2015 스펙에 명시되어 있습니다. 이 개념이 중요한 이유는 Tail call optimization이라는 최적화 기법과 관련되어 있기 때문입니다. Tail call optimization의 바탕이 되는 tail position이란 개념은 strict mode 코드에서만 정의되기 때문에, Tail call optimization 기법이 적용되기 위해선 "use strict" 를 선언해야 합니다.
 
 Tail call optimization은 **특정 조건에서** 함수를 호출한 쪽의 콜스택을 호출의 대상이 되는 함수가 재사용하는 것을 말합니다. 재귀함수를 호출할 때, 종료 조건을 잘못 지정하는 등의 이유로 *Maximum call stack size exeeded* 에러가 생겼던 경험이 있을 것입니다. Tail call optimization 은 함수의 tail position 에서 실행되는 코드가 tail call 이라면 콜스택을 재사용하도록 하여 이러한 에러를 막습니다.
 
