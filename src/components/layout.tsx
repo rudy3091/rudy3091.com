@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet";
 import styled from "styled-components";
 import { useStaticQuery, graphql, PageProps } from "gatsby";
 import Logo from "./atoms/Logo";
+import global from '../styles/global';
 
 const MainContainer = styled.div`
   display: flex;
@@ -37,13 +38,7 @@ const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
     <>
       <Helmet title={data.site.siteMetadata.title} />
       <style>
-        {`
-          html,
-          body {
-            margin: 0;
-            padding: 0;
-          }
-        `}
+        {global}
       </style>
       <MainContainer>
         <header>
