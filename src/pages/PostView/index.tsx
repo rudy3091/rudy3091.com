@@ -37,7 +37,7 @@ const PVContainer = styled.div`
   }
 
   & p {
-    margin: 1.5rem 0 0.75rem 0;
+    margin: 1.25rem 0;
     line-height: 2rem;
   }
 
@@ -52,11 +52,14 @@ const PVContainer = styled.div`
     color: #86f;
   }
 
+  /* codeblock */
   & pre {
     padding: 1.75rem;
-    border-radius: 8px;
-    background-color: #f6f6f6;
+    border-radius: 4px;
+    background-color: #f6f6f8;
     overflow: scroll;
+    line-height: 1.25rem;
+    font-size: 0.9rem;
 
     & code {
       padding: 0;
@@ -71,6 +74,17 @@ const PVContainer = styled.div`
 
   & em, & strong {
     color: #45a;
+  }
+
+  & blockquote {
+    padding: 1rem 1.5rem;
+    margin: 1.25rem 0;
+    border-left: 5px solid #227;
+    background-color: #f6f6f8;
+
+    & p {
+      margin: 0;
+    }
   }
 `;
 
