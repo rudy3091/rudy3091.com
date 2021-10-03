@@ -1,5 +1,5 @@
 import * as React from "react";
-import { graphql, Link, useStaticQuery } from "gatsby";
+import { Link } from "gatsby";
 import styled from 'styled-components';
 import SvgLogo from '../../images/logo.svg';
 
