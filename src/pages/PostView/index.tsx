@@ -7,7 +7,7 @@ import { graphql, Link, PageProps } from "gatsby";
 const PVContainer = styled.div`
   & a {
     color: #889;
-    text-decoration: underlined;
+    text-decoration: underline;
     text-decoration-color: #66668888;
 
     display: inline-block;
