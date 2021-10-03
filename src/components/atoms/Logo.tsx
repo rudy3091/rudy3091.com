@@ -1,5 +1,24 @@
 import * as React from "react";
-import { Link } from "gatsby";
+import { graphql, Link, useStaticQuery } from "gatsby";
+import styled from 'styled-components';
+import SvgLogo from '../../images/logo.svg';
+
+const LogoContainer = styled.div`
+  height: 100%;
+
+  margin-left: 50px;
+
+  & > a {
+    display: flex;
+    align-items: center;
+    position: absolute;
+
+    height: 50px;
+
+    color: inherit;
+    text-decoration: none;
+  }
+`
 
 export interface LogoProps {
   routeHome?: boolean;
@@ -7,11 +26,11 @@ export interface LogoProps {
 
 const Logo: React.FC<LogoProps> = (props: LogoProps) => {
   return (
-    <div>
+    <LogoContainer>
       <Link to={props.routeHome ? "/" : ""}>
-        <span>This will be logo</span>
+        <img src={SvgLogo} alt="logo" height="100%" />
       </Link>
-    </div>
+    </LogoContainer>
   );
 };
 
