@@ -270,38 +270,21 @@ tail position 에서 함수를 호출한 `facAcc` 함수는 파라미터로 100,
 
 ## 레퍼런스
 
-mdn - strict mode: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Strict_mode](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Strict_mode)
-
-ES2015 명세 - strict mode code: [https://262.ecma-international.org/6.0/#sec-strict-mode-code](https://262.ecma-international.org/6.0/#sec-strict-mode-code)
-
-ES2015 명세 - directive prologues: [https://262.ecma-international.org/6.0/#sec-directive-prologues-and-the-use-strict-directive](https://262.ecma-international.org/6.0/#sec-directive-prologues-and-the-use-strict-directive)
-
-what is prologue directives: [https://stackoverflow.com/questions/28802885/what-is-prologue-directives](https://stackoverflow.com/questions/28802885/what-is-prologue-directives)
-
-ES2015 명세 - internal slot: [https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots](https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots)
-
-ES2015 명세 - [[ECMAScriptCode]]: [https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots](https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots)
-
-mdn - generator: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/function*](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/function*)
-
-mdn - Generator Function: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction)
-
-what is an "internal slot" of an object in Javascript: [https://stackoverflow.com/questions/33075262/what-is-an-internal-slot-of-an-object-in-javascript](https://stackoverflow.com/questions/33075262/what-is-an-internal-slot-of-an-object-in-javascript)
-
-ES2015 명세 - appendix C: The Strict Mode of ECMAScript: [https://www.notion.so/strict-mode-a3023853aefe44e98efd7f4ae33fa46c#d9fb2212da014bbdbae4c73f5d1a261d]()
-
-asmjs 스펙: [http://asmjs.org/spec/latest/](http://asmjs.org/spec/latest/)
-
-asmjs 관련 포스트: [https://blog.outsider.ne.kr/927](https://blog.outsider.ne.kr/927)
-
-github - asm-js/validator: [https://github.com/asm-js/validator/blob/3b4eca702998db6a49831fba12e708afc29f7c32/lib/validate.js#L163-L185](https://github.com/asm-js/validator/blob/3b4eca702998db6a49831fba12e708afc29f7c32/lib/validate.js#L163-L185)
-
-Content-Security-Policy - script-src: [https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Content-Security-Policy/script-src](https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Content-Security-Policy/script-src)
-
-wikipedia - meta programming: [https://en.wikipedia.org/wiki/Metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming)
-
-ES2015 명세 - tail position calls: [https://262.ecma-international.org/6.0/#sec-tail-position-calls](https://262.ecma-international.org/6.0/#sec-tail-position-calls)
-
-tail call optimization: [https://2ality.com/2015/06/tail-call-optimization.html](https://2ality.com/2015/06/tail-call-optimization.html)
-
+mdn - strict mode: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Strict_mode](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Strict_mode)  
+ES2015 명세 - strict mode code: [https://262.ecma-international.org/6.0/#sec-strict-mode-code](https://262.ecma-international.org/6.0/#sec-strict-mode-code)  
+ES2015 명세 - directive prologues: [https://262.ecma-international.org/6.0/#sec-directive-prologues-and-the-use-strict-directive](https://262.ecma-international.org/6.0/#sec-directive-prologues-and-the-use-strict-directive)  
+what is prologue directives: [https://stackoverflow.com/questions/28802885/what-is-prologue-directives](https://stackoverflow.com/questions/28802885/what-is-prologue-directives)  
+ES2015 명세 - internal slot: [https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots](https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots)  
+ES2015 명세 - [[ECMAScriptCode]]: [https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots](https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots)  
+mdn - generator: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/function*](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/function*)  
+mdn - Generator Function: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction)  
+what is an "internal slot" of an object in Javascript: [https://stackoverflow.com/questions/33075262/what-is-an-internal-slot-of-an-object-in-javascript](https://stackoverflow.com/questions/33075262/what-is-an-internal-slot-of-an-object-in-javascript)  
+ES2015 명세 - appendix C: The Strict Mode of ECMAScript: [https://www.notion.so/strict-mode-a3023853aefe44e98efd7f4ae33fa46c#d9fb2212da014bbdbae4c73f5d1a261d]()  
+asmjs 스펙: [http://asmjs.org/spec/latest/](http://asmjs.org/spec/latest/)  
+asmjs 관련 포스트: [https://blog.outsider.ne.kr/927](https://blog.outsider.ne.kr/927)  
+github - asm-js/validator: [https://github.com/asm-js/validator/blob/3b4eca702998db6a49831fba12e708afc29f7c32/lib/validate.js#L163-L185](https://github.com/asm-js/validator/blob/3b4eca702998db6a49831fba12e708afc29f7c32/lib/validate.js#L163-L185)  
+Content-Security-Policy - script-src: [https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Content-Security-Policy/script-src](https://developer.mozilla.org/ko/docs/Web/HTTP/Headers/Content-Security-Policy/script-src)  
+wikipedia - meta programming: [https://en.wikipedia.org/wiki/Metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming)  
+ES2015 명세 - tail position calls: [https://262.ecma-international.org/6.0/#sec-tail-position-calls](https://262.ecma-international.org/6.0/#sec-tail-position-calls)  
+tail call optimization: [https://2ality.com/2015/06/tail-call-optimization.html](https://2ality.com/2015/06/tail-call-optimization.html)  
 TCO 브라우저 지원: [https://kangax.github.io/compat-table/es6/#test-proper_tail_calls_(tail_call_optimisation)](https://kangax.github.io/compat-table/es6/#test-proper_tail_calls_(tail_call_optimisation))
