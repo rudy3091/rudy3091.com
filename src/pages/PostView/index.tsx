@@ -69,8 +69,8 @@ const PVContainer = styled.div`
     }
   }
 
-  & em {
-    color: #36d;
+  & em, & strong {
+    color: #45a;
   }
 `;
 
