@@ -1,9 +1,11 @@
-# rudy3091.me
+# rudy3091.com
 
-This repository is for building webpage about me.
+This repository is for building webpage for myself.
 
 Built with [gatsby](https://www.gatsbyjs.com/) and can be changed to anything in any time.
 
-Contents will be published mainly in Korean, my first language.
+Almost every contents will be published in Korean, my first language.
 
 Actually I don't think these contents would be that useful for you :)
+
+Currently WIP. Messy codes and UIs.
