@@ -214,7 +214,7 @@ console.log(r1.getAreaNormalDecl()); // 12
 console.dir(r1);
 ```
 
-위 코드는 정상적으로 동작하긴 합니다. 하지만, `console.log(r1)`을 통해 내부를 들여다보면, 다른 점이 하나 있습니다.
+위 코드는 정상적으로 동작하긴 합니다. 하지만, `console.dir(r1)`을 통해 내부를 들여다보면, 다른 점이 하나 있습니다.
 
 ![class](./class.png)
 
