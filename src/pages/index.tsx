@@ -6,8 +6,8 @@ const IndexPage = () => {
   return (
     <Layout>
       <div className="index-container" style={{ width: `100%` }}>
-        <div>hello world</div>
-        <Link to="/test">go to test page</Link>
+        <div>🙂</div>
+        <Link to="/posts">posts</Link>
       </div>
     </Layout>
   );
