@@ -5,21 +5,72 @@ date: "2021-10-14"
 slug: "posts/module-system-in-js"
 ---
 
-프로그램의 크기가 커지면 하나의 파일을 여러 개로 나누는 것이 복잡성을 줄이는 데에 큰 도움이 됩니다. 이때 분리된 파일 하나하나를 `모듈`이라고 합니다. 우리가 사용하는 자바스크립트에는 ES2015 이전버전까지 공식적인 모듈 지원이 없었습니다. 이에 프로그래머들은 직접 모듈 시스템을 구현하여 사용했습니다. 이번 포스트에서는 이러한 모듈 시스템의 종류에 대해 정리한 결과를 공유합니다.
+프로그램의 크기가 커지면 필연적으로 하나의 파일을 여러 개로 나누게 됩니다. 이때 분리된 파일 하나하나를 `모듈`이라고 하는데, 모듈들 간에는 독립성이 보장되어야 합니다. 이러한 모듈 시스템은 프로그래밍 언어가 범용적인 목적으로 사용되기 위한 필수 조건들 중 하나입니다. 우리가 사용하는 자바스크립트에는 ES2015 이전버전까지 공식적인 모듈 지원이 없었습니다. 이에 프로그래머들은 직접 모듈 시스템을 구현하여 사용했습니다. 이번 포스트에서는 이러한 모듈 시스템의 종류와 사용법에 대해 알아본 결과를 공유합니다.
+
+## CommonJS 모듈
+
+자바스크립트가 탄생하고부터, 브라우저 밖에서 자바스크립트를 사용하기 위한 노력은 있어왔습니다. 하지만 대부분의 프로젝트들이 큰 인기를 끌지 못했습니다. 이후 2005년즈음 뜨기 시작한 Ajax로 인해 더 좋은 성능의 자바스크립트 엔진의 필요성이 대두되고 있었습니다. 2008년 구글의 v8엔진의 발표는 기존의 자바스크립트 엔진보다 훨씬 빠른 성능을 가지고 있어, 브라우저 밖에서도 충분히 쓸만했습니다. 이런 분위기 속에서 Kevin Dangoor라는 사람은 서버사이드 자바스크립트에 대한 아이디어를 내고, 이는 곧 CommonJS 프로젝트 그룹으로 발전하게 됩니다. nodejs가 이 CommonJS 표준을 따르는 모듈 시스템을 채택해 우리에게 익숙한 모듈 시스템 중 하나입니다.
+
+모듈은 기본적으로 자신만의 실행 영역이 있어야 합니다. 이를 `스코프`라고 부릅니다. 서버사이드 자바스크립트에서는 파일 스코프가 있기 때문에 파일 하나를 모듈 하나로 간주합니다. 따라서 다른 파일에 같은 이름으로 변수를 선언해도 전역변수가 겹치지 않고, 두 파일 사이에 데이터 교환이 필요할 때에는 exports라는 전역 객체를 이용합니다. 위의 AMD 모듈을 CommonJS 모듈로 작성해보겠습니다.
+
+``` javascript
+// calculator.js
+exports.add = function (a, b) {
+  return a + b;
+}
+
+exports.sub = function (a, b) {
+  return a - b;
+}
+
+exports.mul = function (a, b) {
+  return a * b;
+}
+```
+
+``` javascript
+// index.js
+var calculator = require('./calculator');
+
+console.log('adding 3 and 4 =', calculator.add(3, 4));
+console.log('multiplying 8 and 3 =', calculator.mul(8, 3));
+```
+
+위 코드는 간단하게 calculator.js 에 선언된 함수를 index.js 에서 이용하는 예제입니다. nodejs 환경에서 하던 것과 동일한 방법입니다. nodejs의 exports 객체는 nodejs 내부 객체인 `module` 객체의 프로퍼티 `module.exports`를 참조하는 객체입니다. exports 객체는 `module.exports`의 복사본이 아닌 참조를 가지고 있어 exports 의 프로퍼티가 변경될 때 module.exports 의 프로퍼티 역시 변경됩니다. 이때, exports 의 값 자체를 바꾸게 되면 exports 객체는 더이상 module.exports 에 바인딩되지 않고 파일 내부에서만 valid한 값이 됩니다. 이는 nodejs의 [공식 문서](https://nodejs.org/api/modules.html#modules_exports_shortcut)에서 확인할 수 있습니다.
+
+![nodejs-exports](./nodejs-exports.png)
+
+하지만 CommonJS 모듈에는 큰 문제가 하나 있었습니다. 바로 비동기 문제입니다. 모든 파일이 디스크에 저장되어있는 서버사이드 환경과는 다르게 브라우저에서는 스크립트 파일 하나하나를 네트워크를 통해 로드해와야합니다. 이 과정에서 앞에서 선언한 전역 변수를 뒤에 따라오는 스크립트 파일이 덮어쓰게 되는 문제점 역시 발생합니다.
+
+이를 해결하기 위해 CommonJS 그룹은 모듈을 `require.define()` 함수로 감싸는 방법을 도입했습니다. 이는 CommonJS 공식 위키의 `Transport/D`에 정리되어 있습니다. [링크](http://wiki.commonjs.org/wiki/Modules/Transport/D)에서 다른 패턴을 추가로 확인할 수 있습니다.
+
+``` javascript
+// 공식 위키의 예제
+require.define({
+  "math/add": function(require, exports, module) {
+    var sum = require("./general").sum;
+    exports.plusTwo = function(a) {
+      return sum(a, 2);
+    };
+  }
+}, ["math/general"]); // 이 모듈이 가지는 의존성 모듈들
+```
+
+이외의 자세한 CommonJS 모듈 스펙은 [공식 위키](http://wiki.commonjs.org/wiki/Modules/1.1)에서 확인할 수 있습니다.
 
 ## AMD 모듈
 
-`AMD`는 `Asynchronous module definition`, 즉 `비동기적 모듈 정의`를 의미합니다. 자바스크립트의 모듈에 대한 표준을 만드는 일을 하는 `CommonJS` 라는 그룹이 있었습니다. 비동기적 상황에서도 자바스크립트 모듈을 쓰기 위해 CommonJS에서 함께 논의하다 서로 합의하지 못한 사람들이 있습니다. 이들이 독립하여 만든그룹이 AMD 그룹입니다.
+`AMD`는 `Asynchronous module definition`, 즉 `비동기적 모듈 정의`를 의미합니다. 자바스크립트의 모듈에 대한 표준을 만드는 일을 하는 `CommonJS` 라는 그룹이 있었습니다. 그들 중 비동기적 상황에서도 자바스크립트 모듈을 쓰기 위해 CommonJS에서 함께 논의하다 서로 합의하지 못한 사람들이 독립하여 만든 그룹이 AMD 그룹입니다.
 
 AMD 모듈은 네트워크를 통해 필요한 모듈을 내려받는 상황에 적합한 표준입니다. 필요한 파일들이 저장공간에 이미 존재하는 서버사이드와는 다르게 브라우저에서는 필요한 모듈들을 비동기적으로 로드하게 됩니다. 이러한 환경에서는 AMD가 CommonJS보다 더 유연한 방법을 제공합니다.
 
-가장 먼저 AMD 모듈에서, 파일 스코프의 역할은 `define()` 함수가 수행합니다. define 함수는 전역 스코프에서 아래와 같이 정의합니다.
+AMD 모듈에서, 파일 스코프의 역할은 `define()` 함수가 수행합니다. define 함수는 전역 스코프에서 아래와 같이 정의됩니다.
 
 ```javascript
 define(id?, dependencies?, factory);
 ```
 
-첫 번째 파라미터 `id`는 모듈을 식별하는데 사용됩니다. 두번째 파라미터 `dependencies`는 가장 먼저 로드되어야 하는 모듈을 나타냅니다. 이 모듈들은 세번째 파라미터인 `factory()` 함수의 인자로 넘겨집니다. 두 번째 인자를 생략하면, 기본적으로 `['require', 'exports', 'module']`이라는 이름들이 할당됩니다. 이 이름들은 CommonJS 모듈에서 각각의 이름을 가진 객체들이 하는 역할과 동일합니다. `factory()` 함수는 모듈이나 객체를 인스턴스화 하는 실제 구현을 담당합니다. 전달된 파라미터가 함수라면 한번만 실행됨이 보장되며, 반환값을 exports 객체의 프로퍼티로 할당하고, 객체라면 바로 exports 객체의 속성으로 할당합니다. 아래는 AMD 모듈로 정의한 간단한 예제입니다.
+첫 번째 파라미터 `id`는 모듈을 식별하는데 사용됩니다. 두번째 파라미터 `dependencies`는 정의하려는 모듈이 의존성을 가지는 모듈을 지정합니다. 이 모듈들은 세번째 파라미터인 `factory()` 함수의 인자로 넘겨집니다. 두 번째 인자를 생략하면, 기본적으로 `['require', 'exports', 'module']`이라는 이름들이 할당됩니다. 이 이름들은 CommonJS 모듈에서 각각의 이름을 가진 객체들이 하는 역할과 동일합니다. `factory()` 함수는 모듈이나 객체를 인스턴스화 하는 실제 구현을 담당합니다. 전달된 파라미터가 함수라면 한번만 실행됨이 보장되며, 반환값을 exports 객체의 프로퍼티로 할당하고, 객체라면 바로 exports 객체의 속성으로 할당합니다. 아래는 AMD 모듈로 정의한 간단한 예제입니다.
 
 ```javascript
 define("calculator", ["require", "exports", "arithmetic"], function (
@@ -105,43 +156,6 @@ index.html 파일에서 script 태그의 순서를 보면 index.js 파일이 먼
 
  위 코드와 같이 setTimeout 함수의 콜백함수는 현재 실행중인 콜스택이 모두 종료된 뒤에 실행됩니다. RequireJS의 동작은 이렇게 브라우저의 setTimeout 함수를 이용해 구현된 것으로 보입니다(**뇌피셜입니다**).
 
-## CommonJS 모듈
-
-자바스크립트가 탄생하고부터, 브라우저 밖에서 자바스크립트를 사용하기 위한 노력은 있어왔습니다. 하지만 대부분의 프로젝트들이 큰 인기를 끌지 못했습니다. 이후 2005년즈음 뜨기 시작한 Ajax로 인해 더 좋은 성능의 자바스크립트 엔진의 필요성이 대두되고 있었습니다. 2008년 구글의 v8엔진의 발표는 기존의 자바스크립트 엔진보다 훨씬 빠른 성능을 가지고 있어, 브라우저 밖에서도 충분히 쓸만했습니다. 이런 분위기 속에서 Kevin Dangoor라는 사람은 서버사이드 자바스크립트에 대한 아이디어를 내고, 이는 곧 CommonJS 프로젝트 그룹으로 발전하게 됩니다. nodejs가 이 CommonJS 표준을 따르는 모듈 시스템을 채택해 우리에게 익숙한 모듈 시스템 중 하나입니다.
-
-모듈은 기본적으로 자신만의 실행 영역이 있어야 합니다. 이를 `스코프`라고 부릅니다. 서버사이드 자바스크립트에서는 파일 스코프가 있기 때문에 파일 하나를 모듈 하나로 간주합니다. 따라서 다른 파일에 같은 이름으로 변수를 선언해도 전역변수가 겹치지 않고, 두 파일 사이에 데이터 교환이 필요할 때에는 exports라는 전역 객체를 이용합니다. 위의 AMD 모듈을 CommonJS 모듈로 작성해보겠습니다.
-
-``` javascript
-// calculator.js
-exports.add = function (a, b) {
-  return a + b;
-}
-
-exports.sub = function (a, b) {
-  return a - b;
-}
-
-exports.mul = function (a, b) {
-  return a * b;
-}
-```
-
-``` javascript
-// index.js
-var calculator = require('./calculator');
-
-console.log('adding 3 and 4 =', calculator.add(3, 4));
-console.log('multiplying 8 and 3 =', calculator.mul(8, 3));
-```
-
-위 코드는 간단하게 calculator.js 에 선언된 함수를 index.js 에서 이용하는 예제입니다. nodejs 환경에서 하던 것과 동일한 방법입니다. nodejs의 exports 객체는 nodejs 내부 객체인 `module` 객체의 프로퍼티 `module.exports`를 참조하는 객체입니다. exports 객체는 `module.exports`의 복사본이 아닌 참조를 가지고 있어 exports 의 프로퍼티가 변경될 때 module.exports 의 프로퍼티 역시 변경됩니다. 이때, exports 의 값 자체를 바꾸게 되면 exports 객체는 더이상 module.exports 에 바인딩되지 않고 파일 내부에서만 valid한 값이 됩니다. 이는 nodejs의 [공식 문서](https://nodejs.org/api/modules.html#modules_exports_shortcut)에서 확인할 수 있습니다.
-
-![nodejs-exports](./nodejs-exports.png)
-
-서버사이드 영역 외에 브라우저에서도 CommonJS 모듈 시스템을 사용할 수 있습니다. // TODO
-
-이외의 자세한 CommonJS 모듈 스펙은 [공식 위키](http://wiki.commonjs.org/wiki/Modules/1.1)에서 확인할 수 있습니다.
-
 ## UMD 모듈
 
 이렇게 자바스크립트에서도 모듈을 사용할 수 있게 된 것은 좋습니다. 하지만 UMD와 CommonJS로 나뉘어진 모듈 시스템은 호환이 되지 않는 문제가 있었습니다. UMD 모듈은 CommonJS 모듈과 AMD 모듈을 통합하여 사용하기 위한 모듈 시스템입니다. UMD 모듈 시스템은 위의 AMD나 CommonJS 같은 스펙이 아니라 일종의 디자인 패턴이라 할 수 있습니다. 깃허브의 [umdjs 저장소의 리드미 문서](https://github.com/umdjs/umd)에서는 UMD 모듈을 이렇게 소개합니다.
@@ -173,7 +187,7 @@ UMD 패턴에는 많은 종류의 바리에이션이 존재합니다. 이 목록
 
 살펴보니 amdWeb 패턴은 AMD 모듈 또는 브라우저의 전역 객체를 이용해 모듈 시스템을 구현한 패턴입니다. 주석에 써놓은 것과 같이 AMD 모듈 로더가 없으면 브라우저의 전역 객체를, 있으면 AMD 모듈 로더를 이용해 모듈 시스템을 사용하고 있습니다. 이때 전역 객체는 `Web Worker` 환경 역시 지원하기 위해 `self` 를 사용하고 있습니다. `self`에 관한 자세한 설명은 [MDN의 설명](https://developer.mozilla.org/ko/docs/Web/API/Window/self)을 참고해주세요.
 
-`umdjs`는 nodejs 환경에서도 잘 동작하는 패턴을 알아보고 싶다면 returnExports 패턴을 참고하라고 합니다. 아래 코드가 그것입니다.
+amdWeb 패턴의 주석에서, nodejs 환경에서도 잘 동작하는 패턴을 알아보고 싶다면 `returnExports` 패턴을 참고하라고 합니다. `returnExports.js`을 열어봤습니다. 아래 코드가 그것입니다.
 
 ``` javascript
 (function (root, factory) {
@@ -193,7 +207,7 @@ UMD 패턴에는 많은 종류의 바리에이션이 존재합니다. 이 목록
 }));
 ```
 
-`define` 함수와 `module.exports` 가 존재하는지에 따라 AMD 혹은 CommonJS 모듈을 사용할지를 결정하고 있습니다. 관련 함수 또는 객체가 존재하는지 체크하고, 알맞은 모듈 시스템을 선택해 사용합니다. 사용법은 AMD와 CommonJS 모듈과 다를 게 없습니다.
+`define` 함수와 `module.exports` 가 존재하는지에 따라 AMD 혹은 CommonJS 모듈을 사용할지를 결정하고 있습니다. 관련 함수 또는 객체가 존재하는지 체크하고, 알맞은 모듈 시스템을 선택해 사용합니다. 사용법은 AMD와 CommonJS 모듈과 다를 게 없어 보입니다.
 
 ## ES6 모듈
 
@@ -268,11 +282,36 @@ ES2015 스펙에서 정의한 공식 모듈 시스템인 만큼, 스펙 문서�
 })(window);
 ```
 
-위 코드는 네이버 커넥트재단의 교육 플랫폼 [edwith](https://www.edwith.org/)의 소스코드 일부입니다. 소스에서 알 수 있듯 iife 방식으로 exportTarget 이라는 파라미터에 프로퍼티를 등록하는 방식으로 동작합니다. 이떄 exportTarget에는 브라우저의 전역객체 window를 전달해 다른 모듈에서 사용할 수 있도록 하고 있습니다. 또한 아래 사진에서 보는것과 같이 `require` 함수를 사용하는 것과 파일 이름들에 `browserfied.min.js` 와 같은 패턴이 있는 것을 보아 [browserify 라이브러리](https://github.com/browserify/browserify)를 사용하여 개발한 것을 추측해볼 수 있습니다.
+위 코드는 네이버 커넥트재단의 교육 플랫폼 [edwith](https://www.edwith.org/)의 소스코드 일부입니다. 소스에서 알 수 있듯 iife 방식으로 exportTarget 이라는 파라미터에 프로퍼티를 등록하는 방식으로 동작합니다. 이떄 exportTarget에는 브라우저의 전역객체 window를 전달해 다른 모듈에서 사용할 수 있도록 하고 있습니다. 또한 아래 사진에서 보는것과 같이 `require` 함수를 사용하는 것과 파일 이름들에 `browserfied.min.js` 와 같은 패턴이 있는 것을 보아 CommonJS의 `require` 함수를 브라우저에서 사용할 수 있게 해주는 [browserify 라이브러리](https://github.com/browserify/browserify)를 사용하여 개발한 것을 추측해볼 수 있습니다.
 
 ![edwith-require](./edwith-require.png)
 
 ![edwith-require](./edwith-browserfied.png)
+
+``` javascript
+  ...
+  if (entry.length) {
+    // Expose entry point to Node, AMD or browser globals
+    // Based on https://github.com/ForbesLindesay/umd/blob/master/template.js
+    var mainExports = newRequire(entry[entry.length - 1]);
+
+    // CommonJS
+    if (typeof exports === "object" && typeof module !== "undefined") {
+      module.exports = mainExports;
+
+    // RequireJS
+    } else if (typeof define === "function" && define.amd) {
+     define(function () {
+       return mainExports;
+     });
+
+    // <script>
+    } else if (globalName) {
+      this[globalName] = mainExports;
+    }
+  }
+  ...
+```
 
 ``` javascript
 ...
@@ -291,15 +330,16 @@ ES2015 스펙에서 정의한 공식 모듈 시스템인 만큼, 스펙 문서�
 }
 ```
 
-위 코드는 작은 파일 몇개로 이루어진 프로젝트를 `parcel` 번들러가 빌드한 결과물의 일부입니다. require, module, exports를 함수로 전달하여 모듈 시스템을 사용하고 있는 것을 볼 수 있습니다. 소스코드의 양이 너무 방대해 상세한 분석은 할 수 없었지만 위에서 소개한 `require`, `module`, `exports` 키워드로 모듈 시스템을 이루고 있는 것을 추측해볼 수 있습니다.
+위 코드는 작은 파일 몇개로 이루어진 프로젝트를 `parcel` 번들러가 빌드한 결과물의 일부입니다. 소스코드의 양이 너무 방대해 자세한 분석은 할 수 없었지만, define 함수와 exports 프로퍼티를 체크하며 어떤 모듈 시스템을 사용하는 것으로 보아 UMD 모듈 시스템의 `returnExports` 패턴을 사용하고 있음을 추측해볼 수 있습니다.
 
 ## 레퍼런스
 
 모던 자바스크립트 튜토리얼 - 모듈: [https://ko.javascript.info/modules-intro](https://ko.javascript.info/modules-intro)  
 naver d2 - RequireJS - AMD의 이해와 개발: [https://d2.naver.com/helloworld/591319](https://d2.naver.com/helloworld/591319)  
 naver d2 - JavaScript 표준을 위한 움직임: CommonJS와 AMD: [https://d2.naver.com/helloworld/12864](https://d2.naver.com/helloworld/12864)  
-requirejs - with comment: [https://requirejs.org/docs/release/2.3.6/comments/require.js](https://requirejs.org/docs/release/2.3.6/comments/require.js)  
 CommonJS spec - Modules/1.1: [http://wiki.commonjs.org/wiki/Modules/1.1](http://wiki.commonjs.org/wiki/Modules/1.1)  
+CommonJS - Module/Transport/D: [http://wiki.commonjs.org/wiki/Modules/Transport/D](http://wiki.commonjs.org/wiki/Modules/Transport/D)  
+requirejs - with comment: [https://requirejs.org/docs/release/2.3.6/comments/require.js](https://requirejs.org/docs/release/2.3.6/comments/require.js)  
 nodejs api docs - module: [https://nodejs.org/api/modules.html#modules\_exports\_shortcut](https://nodejs.org/api/modules.html#modules_exports_shortcut)  
 블로그 포스트 - UMD 패턴: [https://blog.rhostem.com/posts/2019-06-23-universal-module-definition-pattern](https://blog.rhostem.com/posts/2019-06-23-universal-module-definition-pattern)  
 github - umdjs/umd: [https://github.com/umdjs/umd](https://github.com/umdjs/umd)  
