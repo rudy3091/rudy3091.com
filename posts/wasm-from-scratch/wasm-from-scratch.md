@@ -1,7 +1,7 @@
 ---
 title: "밑바닥부터 시작하는 웹 어셈블리(근데 이제 실패를 곁들인)"
 author: "김현민 @rudy3091"
-date: "2021-09-19"
+date: "2021-10-25"
 slug: "posts/wasm-from-scratch"
 ---
 
