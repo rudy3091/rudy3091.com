@@ -104,11 +104,13 @@ _반응형으로 생각하기_ 에 익숙하지 않다면 이러한 사용법이
 
 ### 더블클릭 감지
 
+<center>
 <iframe height="300" style="width: 100%; max-width: 500px;" scrolling="no" title="RxJS double click" src="https://codepen.io/rudypark3091/embed/ExvwZpv?default-tab=result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
   See the Pen <a href="https://codepen.io/rudypark3091/pen/ExvwZpv">
   RxJS double click</a> by RudyPark3091 (<a href="https://codepen.io/rudypark3091">@rudypark3091</a>)
   on <a href="https://codepen.io">CodePen</a>.
 </iframe>
+</center>
 
 ![debouncetime](./debouncetime.png)
 
