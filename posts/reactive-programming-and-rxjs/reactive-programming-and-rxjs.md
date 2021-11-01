@@ -100,9 +100,9 @@ oneToTen.subscribe({ // subscribe 함수에 객체를 전달하면 스트림 에
 });
 ```
 
-_반응형으로 생각하기_ 에 익숙하지 않다면 이러한 사용법이 잘 와닿지 않을 수 있습니다. 객체지향 패러다임으로만 코드를 쓰다 함수형 프로그래밍 패러다임으로 코드를 쓰려면 어려운 것과 같은 원리입니다. 간단한 예제를 보겠습니다.
+_반응형으로 생각하기_ 에 익숙하지 않다면 이러한 사용법이 잘 와닿지 않을 수 있습니다. 객체지향 패러다임으로만 코드를 쓰다 함수형 프로그래밍 패러다임으로 코드를 쓰려면 어려운 것과 비슷한 느낌입니다. RxJS 에서 제공하는 `debouncing`과 `throttling` Operator를 사용해 더블클릭을 감지하는 예제를 보겠습니다.
 
-### 더블클릭 감지
+### debouncing을 이용한 더블클릭 감지
 
 <center>
 <iframe height="300" style="width: 100%; max-width: 500px;" scrolling="no" title="RxJS double click" src="https://codepen.io/rudypark3091/embed/ExvwZpv?default-tab=result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
@@ -139,17 +139,202 @@ RxJS 에서 제공하는 `debounceTime` operator를 이용해 더블클릭 이�
 ```
                           250 ms
                           |-|
-clickStream:     ---c---c-c--------c---c---cc------|->  = 최초 클릭 이벤트 스트림
-debouncedStream: -----d-----d--------d---d----d----|->
-buffer:          -----c-----c--------c--------c----|->
-                            c                 c    | >
+clickStream:       ---c---c-c--------c---c---cc------|->  = 최초 클릭 이벤트 스트림
+debouncedStream:   -----d-----d--------d---d----d----|->
+                   vvvvvvvvvvvvv   pipe   vvvvvvvvvvvvvv
+buffer:            -----c-----c--------c--------c----|->
+                              c                 c    | >
 
-map:             -----1-----2--------1--------2----|->
-filter:          -----------e-----------------e----|->
+map:               -----1-----2--------1--------2----|->
+filter:            -----------f-----------------f----|->
+                   vvvvvvvvvvvvv  result  vvvvvvvvvvvvvv
+doubleClickStream: -----------e-----------------e----|->
 = 최종 더블클릭 이벤트 스트림
 ```
 
 `buffer` operator는 debouncedStream의 이벤트 사이에 clickStream 이벤트를 버퍼링해주는 역할을 하고, `map`, `filter` operator는 Array.prototype 의 map, filter 메소드와 동일한 역할을 합니다. 이러한 operator 들의 조합으로 클릭 이벤트간의 간격이 250 ms 이하인 클릭 이벤트를 감지할 수 있습니다. 그 결과로 우리는 더블클릭 이벤트 스트림을 얻을 수 있고, 이 스트림을 subscribe 하여 이벤트 리스너를 등록할 수 있습니다.
+
+### throttling으로 개선하기
+
+위에서 작성한 더블클릭 예제는 어딘가 부족한 점이 있습니다. debounceTime을 이용했기 때문에 이벤트 간격을 250 밀리초가 아니라 더 큰 값을 주게 되면 더블클릭 이벤트가 발생하고 난 뒤 이벤트 간격에 해당하는 시간동안 딜레이가 생깁니다. 아래 예제처럼 말이죠.
+
+<center>
+<iframe height="300" style="width: 100%; max-width: 500px;" scrolling="no" title="debounced stream delay 1000ms" src="https://codepen.io/rudypark3091/embed/ExvbYpx?default-tab=result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/rudypark3091/pen/ExvbYpx">
+  debounced stream delay 1000ms</a> by RudyPark3091 (<a href="https://codepen.io/rudypark3091">@rudypark3091</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+</center>
+
+``` javascript
+const closed1 = document.getElementById("closed");
+const opened1 = document.getElementById("opened");
+const closed2 = document.getElementById("closed2");
+const opened2 = document.getElementById("opened2");
+
+const ops = rxjs.operators;
+const apps = document.querySelectorAll(".app");
+const clickStream1000 = rxjs.fromEvent(apps[0], "click");
+const clickStream2000 = rxjs.fromEvent(apps[1], "click");
+
+const debouncedStream1000 = clickStream1000.pipe(ops.debounceTime(1000));
+const debouncedStream2000 = clickStream2000.pipe(ops.debounceTime(2000));
+
+const bufferStream1000 = clickStream1000.pipe(
+  ops.buffer(debouncedStream1000),
+  ops.map((buf) => buf.length),
+  ops.filter((len) => len >= 2)
+);
+const bufferStream2000 = clickStream2000.pipe(
+  ops.buffer(debouncedStream2000),
+  ops.map((buf) => buf.length),
+  ops.filter((len) => len >= 2)
+);
+
+bufferStream1000.subscribe(() => {
+  opened1.classList.toggle("hidden");
+  closed1.classList.toggle("hidden");
+});
+bufferStream2000.subscribe(() => {
+  opened2.classList.toggle("hidden");
+  closed2.classList.toggle("hidden");
+});
+```
+
+이 문제를 해결하기 위해 `throttle` Operator를 사용해보겠습니다. throttle operator는 아래 마블 다이어그램에 표시된 것과 같이 어떠한 스트림의 데이터들을 일정 시간동안 무시하고, 다시 배출하는 것을 반복합니다. 이때 leading과 trailing 옵션으로 최초 또는 마지막에 발생하는 데이터를 받아들일지 무시할지 결정합니다.
+
+![throttle](./throttle.png)
+
+<center>
+<iframe height="300" style="width: 100%; max-width: 500px;" scrolling="no" title="throttle" src="https://codepen.io/rudypark3091/embed/vYJWYLW?default-tab=result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/rudypark3091/pen/vYJWYLW">
+  throttle</a> by RudyPark3091 (<a href="https://codepen.io/rudypark3091">@rudypark3091</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+</center>
+
+``` javascript
+const closed = document.getElementById("closed");
+const opened = document.getElementById("opened");
+
+const ops = rxjs.operators;
+const clickStream = rxjs.fromEvent(window.app, "click");
+
+const throttledStream = clickStream.pipe(
+  ops.throttle(() => rxjs.interval(250), {
+    leading: false,
+    trailing: true
+  })
+);
+const bufferStream = clickStream.pipe(
+  ops.buffer(throttledStream),
+  ops.map((buf) => buf.length),
+  ops.filter((len) => len >= 2)
+);
+
+bufferStream.subscribe(() => {
+  opened.classList.toggle("hidden");
+  closed.classList.toggle("hidden");
+});
+```
+
+위 과정을 debounce 예제와 같은 마블 다이어그램으로 표현하면 아래와 같습니다.
+
+```
+                   250 ms
+                   |-|
+clickStream:       ---c---c-c--------c---c---cc------|->  = 최초 클릭 이벤트 스트림
+interval:          --|->
+throttledStream:   -----d---d----------d---d---d-----|->
+                   vvvvvvvvvvvvv   pipe   vvvvvvvvvvvvvv
+buffer:            -----c---c----------c-------c-----|->
+                            c                  c     | >
+
+map:               -----1---2----------1-------2-----|->
+filter:            ---------f------------------f-----|->
+                   vvvvvvvvvvvvv  result  vvvvvvvvvvvvvv
+doubleClickStream: ---------e------------------e-----|->
+= 최종 더블클릭 이벤트 스트림
+```
+
+위의 debounce 스트림과 다른 점이 있다면, throttle Operator는 첫 데이터가 발생하고 250ms 의 인터벌이 끝나면 바로 throttledStream 의 데이터가 생성됩니다. 따라서 최초 클릭 이후 인터벌만큼의 시간이 흐르기 전에 한번 더 클릭을 하게되면 더블클릭 이벤트로 인식되게 됩니다.
+
+```
+                      1000 ms
+                   |----------|      |----------|
+clickStream:       ---c---c-c--------c---c---cc------|->  = 최초 클릭 이벤트 스트림
+interval:          -----------|->
+throttledStream:   -----------d-----------------d----|->
+                   vvvvvvvvvvvvv   pipe   vvvvvvvvvvvvvv
+buffer:            ----------c4----------------c4----|->
+
+map:               -----------4-----------------4----|->
+filter:            -----------f-----------------f----|->
+                   vvvvvvvvvvvvv  result  vvvvvvvvvvvvvv
+doubleClickStream: -----------e-----------------e----|->
+= 최종 더블클릭 이벤트 스트림
+```
+
+위와 같이 인터벌을 1000ms 과 2000ms 로 처리한 예제는 아래와 같습니다.
+
+<center>
+<iframe height="300" style="width: 100%; max-width: 500px;" scrolling="no" title="throttled interval 1000ms" src="https://codepen.io/rudypark3091/embed/rNzYavd?default-tab=result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href="https://codepen.io/rudypark3091/pen/rNzYavd">
+  throttled interval 1000ms</a> by RudyPark3091 (<a href="https://codepen.io/rudypark3091">@rudypark3091</a>)
+  on <a href="https://codepen.io">CodePen</a>.
+</iframe>
+</center>
+
+``` javascript
+const closed1 = document.getElementById("closed");
+const opened1 = document.getElementById("opened");
+const closed2 = document.getElementById("closed2");
+const opened2 = document.getElementById("opened2");
+
+const ops = rxjs.operators;
+const apps = document.querySelectorAll(".app");
+const clickStream1000 = rxjs.fromEvent(apps[0], "click");
+const clickStream2000 = rxjs.fromEvent(apps[1], "click");
+
+const throttledStream1000 = clickStream1000.pipe(
+  ops.throttle(() => rxjs.interval(1000), {
+    leading: false,
+    trailing: true
+  })
+);
+const throttledStream2000 = clickStream2000.pipe(
+  ops.throttle(() => rxjs.interval(2000), {
+    leading: false,
+    trailing: true
+  })
+);
+
+const bufferStream1000 = clickStream1000.pipe(
+  ops.buffer(throttledStream1000),
+  ops.map((buf) => buf.length),
+  ops.filter((len) => len >= 2)
+);
+const bufferStream2000 = clickStream2000.pipe(
+  ops.buffer(throttledStream2000),
+  ops.map((buf) => buf.length),
+  ops.filter((len) => len >= 2)
+);
+
+bufferStream1000.subscribe(() => {
+  opened1.classList.toggle("hidden");
+  closed1.classList.toggle("hidden");
+});
+bufferStream2000.subscribe(() => {
+  opened2.classList.toggle("hidden");
+  closed2.classList.toggle("hidden");
+});
+```
+
+위의 debounced 예제와 비교했을 때 인터벌이 길어지게 되면 조금 답답한 면은 있지만, throttle 예제는 인터벌 동안의 더블클릭을 감지하는 반면 debounce 예제는 마지막 클릭 이후의 인터벌 동안 더이상 클릭이벤트가 발생하지 않을 때까지 기다린다는 점에서 throttle Operator를 이용한 편이 더 사용성이 좋아 보입니다.
+
+## 마치며
+
+RxJS 라이브러리를 이용하여 반응형 프로그래밍 패러다임으로 간단한 예제를 하나 작성해봤습니다. 이 포스트에서는 간단한 더블클릭 예제만 알아봤지만, 반응형 프로그래밍 역시 프로그래밍 패러다임의 일종이기 때문에 많은 일들을 할 수 있습니다. 여기서 다루지 않은 RxJS의 Operator들이 아주 많습니다. 이러한 Operator들을 잘 이용하면 **모든 것을 스트림으로 처리하는** 반응형 프로그래밍 코드를 쓸 수 있을거라 생각됩니다. 추가적인 예제는 [레퍼런스](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754)에서 확인할 수 있습니다.
 
 ## 레퍼런스
 
