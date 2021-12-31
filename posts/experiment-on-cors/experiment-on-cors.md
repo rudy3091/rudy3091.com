@@ -83,13 +83,11 @@ CORS는 잘 알다시피 한 애플리케이션이 다른 출처의 리소스에
 $ npx serve .
 ```
 
-<div style="display: flex;">
-  <div>
-    <img src="./1.png" alt="1.png">
-    <img src="./2.png" alt="2.png">
-  </div>
-   <img src="./3.png" alt="3.png">
-</div>
+![1.png](./1.png)
+
+![2.png](./2.png)
+
+![3.png](./3.png)
 
 응답 헤더에는 응답코드 200으로 정상적인 결과를 받아옵니다
 
@@ -107,19 +105,17 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 
 Content-Type 헤더에 이어 `Access-Control-Allow-Origin` 헤더를 추가했습니다
 
-<div style="display: flex;">
-  <div>
-    <img src="./4.png" alt="4.png">
-    <img src="./5.png" alt="6.png">
-  </div>
-   <img src="./6.png" alt="6.png">
-</div>
+![4.png](./4.png)
+
+![5.png](./5.png)
+
+![6.png](./6.png)
 
 응답 결과 자체는 동일하지만 응답 헤더에 `Access-Control-Allow-Origin`을 추가하니 응답 결과를 정상적으로 사용할 수 있었습니다
 
 그럼 5000번 포트가 아닌 5001번 포트에서 서버로 요청을 보내보겠습니다
 
-<img src="./7.png" alt="7.png">
+![7.png](./7.png)
 
 이번에는 `Access-Control-Allow-Origin`헤더는 있지만, origin과 다르다는 에러 메시지를 보여줍니다
 
@@ -160,13 +156,11 @@ fetch('http://localhost:8080', { headers: { 'Content-Type': 'application/json' }
 
 사전 요청이 정상적으로 생성되어서 전송되었는지 보겠습니다
 
-<div>
-  <img src="./8.png" alt="8.png">
-  <div style="display: flex;">
-    <img src="./9.png" alt="9.png">
-    <img src="./10.png" alt="10.png">
-  </div>
-</div>
+![8.png](./8.png)
+
+![9.png](./9.png)
+
+![10.png](./10.png)
 
 `OPTIONS` 메소드를 통해 사전 요청을 만들어 서버로 보내고 있습니다
 
