@@ -134,7 +134,7 @@ class Bar { f(x: string) { /* ... */ } }
 const foo: Foo = new Bar(); // OK: 서로 다른 타입이라도 structural type에서는 구조가 같으므로 에러 발생X
 ```
 
-타입스크립트에서는 class 타입은 structural typing 을 따르기 때문에 Parent와 Child의 구조가 같은 첫번째 예제에서는 에러가 발생하지 않고, Child의 프로퍼티를 추가한 두번째 예제에서는 에러가 발생합니다. 반면 flow의 class 타입은 nominal typing을 따르기 때문에, 구조가 같더라도 다른 타입으로 인식해 에러를 발생시킵니다. 이때 typescript 역시 함수의 파라미터는 more specific 한 subtype만을 허용하는 Covariant 한 성질을 확인할 수 있습니다. 개인적으로 타입스크립트의 타입 시스템은 괴상한 문법이 많이 있지만 결국엔 함수와 객체 뿐 아니라 클래스까지 structural typing 을 따르기 때문에 자바스크립트의 duck typing을 컴파일 타임에 검사해주는 것에 불과한 느낌을 받았습니다.
+타입스크립트에서는 class 타입은 structural typing 을 따르기 때문에 Parent와 Child의 구조가 같은 첫번째 예제에서는 에러가 발생하지 않고, Child의 프로퍼티를 추가한 두번째 예제에서는 에러가 발생합니다. 반면 flow의 class 타입은 nominal typing을 따르기 때문에, 구조가 같더라도 다른 타입으로 인식해 에러를 발생시킵니다. 이때 typescript 역시 함수의 리턴타입은 more specific 한 subtype만을 허용하는 Covariant 한 성질을 확인할 수 있습니다. 개인적으로 타입스크립트의 타입 시스템은 괴상한 문법이 많이 있지만 결국엔 함수와 객체 뿐 아니라 클래스까지 structural typing 을 따르기 때문에 자바스크립트의 duck typing을 컴파일 타임에 검사해주는 것에 불과한 느낌을 받았습니다.
 
 ## Bivariance
 
@@ -203,7 +203,7 @@ interface Store<T> {
   set(item: T): void;
 }
 
-const store: Store<number | string> {
+const store: Store<number | string> = {
   // OK
   set(item: number) { /* ... */ }
 }
@@ -211,7 +211,7 @@ const store: Store<number | string> {
 
 놀랍게도 `set: (item: T) => void` 에서 `set(item: T): void`로만 바꿔줬는데, 에러가 발생하지 않습니다. 아까 `Array<T>`와 같이 직관적으로 봤을 때 Covariant하게 동작해야 할 것 같은 것들이 있었습니다. 이러한 녀석들은 Covariant 하게 동작했으면 좋겠으나, 함수의 파라미터는 Contravariant 하게 동작해야 하므로 이를 지원하기 위해 의도적으로 추가한 문법이 바로 이것이라고 합니다.
 
-정리하자면, **`set(item: T): void`는 함수의 파라미터가 Contravariant 하게 동작하도록 하고, `set: (item: T) => void`는 함수의 파라미터가 Bivariant하게 동작하도록 합니다**.
+정리하자면, **`set(item: T): void`는 함수의 파라미터가 Bivariant 하게 동작하도록 하고, `set: (item: T) => void`는 함수의 파라미터가 Contravariant하게 동작하도록 합니다**.
 
 실제로 깃허브의 타입스크립트 저장소에 선언된 타입선언 파일들에도 메소드들이 `set(item: T): void` 와 같은 형식으로 저장되어 있어, Bivariant 하게 동작합니다.
 
