@@ -1,10 +1,9 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
-import styled from "styled-components";
 import { useStaticQuery, graphql } from "gatsby";
 import Logo from "../atoms/Logo";
-import global from "../../styles/global";
 import S from "./style";
+import GlobalStyle from "../../styles/global";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -24,7 +23,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   return (
     <>
       <Helmet title={data.site.siteMetadata.title} />
-      <style>{global}</style>
+      <GlobalStyle />
       <S.Container>
         <header>
           <S.Nav>
