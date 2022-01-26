@@ -1,29 +1,16 @@
 import * as React from "react";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
-import { useStaticQuery, graphql, PageProps } from "gatsby";
-import Logo from "./atoms/Logo";
-import global from '../styles/global';
+import { useStaticQuery, graphql } from "gatsby";
+import Logo from "../atoms/Logo";
+import global from "../../styles/global";
+import S from "./style";
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
+interface LayoutProps {
+  children: React.ReactNode;
+}
 
-const Nav = styled.nav`
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100%;
-  height: 50px;
-
-  backdrop-filter: blur(10px);
-  z-index: 9;
-`;
-
-const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   const data = useStaticQuery(graphql`
     query SiteTitleQuery {
       site {
@@ -37,20 +24,18 @@ const Layout: React.FC<PageProps> = ({ children }: PageProps) => {
   return (
     <>
       <Helmet title={data.site.siteMetadata.title} />
-      <style>
-        {global}
-      </style>
-      <MainContainer>
+      <style>{global}</style>
+      <S.Container>
         <header>
-          <Nav>
+          <S.Nav>
             <Logo routeHome></Logo>
-          </Nav>
+          </S.Nav>
         </header>
         <main style={{ paddingTop: `50px`, maxWidth: `800px`, width: `100%` }}>
           {children}
         </main>
         <footer></footer>
-      </MainContainer>
+      </S.Container>
     </>
   );
 };
