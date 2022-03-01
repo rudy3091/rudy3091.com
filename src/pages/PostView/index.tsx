@@ -1,5 +1,5 @@
 import * as React from "react";
-import Layout from "../../components/layout";
+import Layout from "../../components/Layout";
 import PostHead from "../../components/PostHead";
 import styled from "styled-components";
 import { graphql, Link, PageProps } from "gatsby";
