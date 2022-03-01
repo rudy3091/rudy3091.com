@@ -53,7 +53,7 @@ MIPS 아키텍처는 밉스 테크놀로지에서 개발한 RISC ISA로, `R`, `I
 
 ### MIPS ISA R format
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/71d14bbf-dd35-40a4-842b-b64330efddd1/Untitled.png)
+![1.png](./1.png)
 
 [MIPS Green Sheet](https://inst.eecs.berkeley.edu/~cs61c/resources/MIPS_Green_Sheet.pdf) 에서 가져온 R format 구조입니다
 
@@ -68,11 +68,11 @@ MIPS 아키텍처는 밉스 테크놀로지에서 개발한 RISC ISA로, `R`, `I
 
 또한 레지스터별 번호 할당은 아래 표와 같습니다
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/ea333136-b540-4536-aa51-8cfa42b781d2/Untitled.png)
+![2.png](2.png)
 
 `add $t0, $s1, $s2` 의 명령어를 기계어로 변환해보겠습니다
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/85f2eee5-7b69-4374-9cc7-e4aa716065ab/Untitled.png)
+![3.png](./3.png)
 
 add 는 rd = rt + rs 를 나타내는 명령어고 `opcode = 0`, `funct = 0x20` 이므로
 
@@ -736,7 +736,7 @@ user_input: resb 4
 
 고백하자면, 사실 위 Fizzbuzz 예제는 제대로 동작하지 않습니다
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/b640b80c-ee27-4856-9b9b-f3ae7cb1361d/Untitled.png)
+![4.png](./4.png)
 
 변수에 저장된 숫자 타입 값을 char 타입으로 출력해줘야하는데, 도저히 그 방법을 찾을 수 없었습니다
 
