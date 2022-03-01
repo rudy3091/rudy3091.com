@@ -278,7 +278,7 @@ syscall
 
 출력 system call 과 비슷하게 `rax` 와 `rdi` 레지스터에 값을 할당해주고 있습니다
 
-```clojure
+```bash
 1	AUE_EXIT	ALL	{ void exit(int rval) NO_SYSCALL_STUB; }
 ```
 
