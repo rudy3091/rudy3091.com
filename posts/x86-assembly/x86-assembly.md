@@ -2,7 +2,7 @@
 title: "컴퓨터는 어떻게 코드를 실행할까"
 author: "김현민 @rudy3091"
 date: "2022-02-06"
-slug: "22/x86-assembly"
+slug: "posts/x86-assembly"
 ---
 
 ## 개요
