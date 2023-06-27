@@ -1,8 +1,8 @@
 ---
-title: "밑바닥부터 시작하는 웹 어셈블리(근데 이제 실패를 곁들인)"
-author: "김현민 @rudy3091"
-date: "2021-10-25"
-slug: "posts/wasm-from-scratch"
+title: '밑바닥부터 시작하는 웹 어셈블리(근데 이제 실패를 곁들인)'
+author: '김현민 @rudy3091'
+date: '2021-10-25'
+slug: 'wasm-from-scratch'
 ---
 
 ## 개요
@@ -21,43 +21,43 @@ slug: "posts/wasm-from-scratch"
 
 우선 웹팩과 관련 모듈들을 설치해줍니다. html 파일을 굳이 작성하지 않기 위해 `html webpack plugin`도 추가해줍니다.
 
-``` bash
+```bash
 $ yarn add --dev webpack webpack-cli webpack-dev-server html-webpack-plugin
 ```
 
 wasm-bindgen 에서 타입스크립트 타이핑을 지원해주기 때문에 타입스크립트로 작성해보겠습니다. 관련 모듈들 역시 추가해줍니다.
 
-``` bash
+```bash
 $ yarn add --dev typescript ts-loader
 ```
 
 웹 어셈블리를 위한 웹팩 로더 역시 추가해줍니다.
 
-``` bash
+```bash
 $ yarn add --dev @wasm-tools/wasm-pack-plugin
 ```
 
 이제 웹팩 설정을 구성해보겠습니다. 타입스크립트 파일은 `ts-loader`를 통해 로드하면 되고, 웹 어셈블리 파일은 `wasm-pack-loader`가 로드하도록 하면 됩니다. 주의할 점은, npm 이나 yarn 을 통해 웹팩을 설치하게 되면 latest 버전인 5 버전이 설치되기 때문에, experiments 옵션의 웹 어셈블리 관련 옵션을 켜줘야됩니다. 이 내용은 [웹팩의 관련문서](https://webpack.js.org/configuration/experiments/)에서 설명하고 있습니다. 설치했던 html 플러그인과 웹 어셈블리 로더는 plugins로 넣어줍니다. 애플리케이션 실행은 `webpack-dev-server`를 통해 진행하도록 하겠습니다. 완성한 웹팩 설정파일은 아래와 같습니다.
 
-``` javascript
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
+```javascript
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WasmPackPlugin = require('@wasm-tool/wasm-pack-plugin');
 
 module.exports = {
-  entry: "./lib/index.ts",
+  entry: './lib/index.ts',
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js', '.wasm' ],
+    extensions: ['.tsx', '.ts', '.js', '.wasm'],
   },
   output: {
-    path: path.resolve(__dirname, "dist"),
-    filename: "index.bundle.js",
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index.bundle.js',
   },
   module: {
     rules: [
       {
         test: /\.ts$/,
-        use: "ts-loader",
+        use: 'ts-loader',
         exclude: /node_modules/,
       },
     ],
@@ -65,14 +65,14 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin(),
     new WasmPackPlugin({
-      crateDirectory: path.resolve(__dirname, "."),
+      crateDirectory: path.resolve(__dirname, '.'),
     }),
   ],
   experiments: {
     asyncWebAssembly: true,
     syncWebAssembly: true,
   },
-  mode: "development",
+  mode: 'development',
 };
 ```
 
@@ -82,7 +82,7 @@ module.exports = {
 
 ### 성능 출력 함수
 
-``` typescript
+```typescript
 function getTime(f: () => void, iter: number): number {
   let sum = 0;
   for (let i = 0; i < iter; i++) {
@@ -103,9 +103,9 @@ function getTime(f: () => void, iter: number): number {
 
 웹 어셈블리 바이너리는 컴파일되고 나서야 실행될 수 있기 때문에 웹 어셈블리 모듈은 비동기적으로 로드합니다. 타입스크립트 환경에서는 이때 로드된 모듈의 타입을 지정해야 하는데, 이는 `typeof` 키워드로 해결할 수 있습니다.
 
-``` typescript
-type WasmType = typeof import("../pkg"); // wasm 바이너리의 경로: ../pkg
-import("../pkg").then((wasm: WasmType) => {
+```typescript
+type WasmType = typeof import('../pkg'); // wasm 바이너리의 경로: ../pkg
+import('../pkg').then((wasm: WasmType) => {
   // do something
 });
 ```
@@ -118,7 +118,7 @@ import("../pkg").then((wasm: WasmType) => {
 
 첫번째는 단순 덧셈연산입니다. 1,000,000 개의 숫자를 반복해서 더해보겠습니다. 더해줄 숫자는 1-10 사이의 난수 배열을 전달하겠습니다.
 
-``` rust
+```rust
 #[wasm_bindgen(js_name = sumRandomArray)]
 pub fn sum_random_array(array: js_sys::Int32Array) -> i32 {
     let mut sum = 0;
@@ -127,7 +127,7 @@ pub fn sum_random_array(array: js_sys::Int32Array) -> i32 {
 }
 ```
 
-``` typescript
+```typescript
 // 난수 배열 생성 함수
 function makeRandomArray(): Int32Array {
   const random = () => Math.floor(Math.random() * 10);
@@ -156,7 +156,7 @@ console.log('[wasm]', wasmTime, 'ms'); // [wasm] 159.63 ms
 
 ### Int32Array 를 이용한 32바이트 signed integer 타입 배열
 
-``` rust
+```rust
 #[wasm_bindgen(js_name = setArrayValue)]
 pub fn set_array_value(array: js_sys::Int32Array) {
     unsafe {
@@ -173,7 +173,7 @@ pub fn set_array_value(array: js_sys::Int32Array) {
 }
 ```
 
-``` typescript
+```typescript
 // 빈 배열 생성
 const array = new Int32Array(1_000_000);
 // 웹 어셈블리 성능 측정
@@ -186,8 +186,8 @@ const jsTime = getTime(() => {
 }, 100);
 
 // 성능 확인
-console.log("[wasm]", wasmTime, "ms"); // [wasm] 0.56 ms
-console.log("[js]", jsTime, "ms"); // [js] 0.21 ms
+console.log('[wasm]', wasmTime, 'ms'); // [wasm] 0.56 ms
+console.log('[js]', jsTime, 'ms'); // [js] 0.21 ms
 ```
 
 위의 결과와 같이 또 웹 어셈블리가 더 좋지 않은 성능을 보였습니다. Rust 언어에서 배열은 가변 크기를 허용하지 않습니다. 하지만 `js_sys::Int32Array.copy_from()` 메소드에는 자바스크립트에서 전달해주는 typed array 와 Rust의 배열은 크기가 같아야 한다는 제약조건이 있습니다. 따라서 Rust 배열의 길이값에 변수를 사용할 수 없어 값을 하드코딩할 수 밖에 없습니다.
@@ -198,7 +198,7 @@ console.log("[js]", jsTime, "ms"); // [js] 0.21 ms
 
 ### Cell 과 Row 노드 만들기
 
-``` rust
+```rust
 pub fn make_cell(idx: i32) -> web_sys::Element {
     let window = web_sys::window().unwrap();
     let document = window.document().unwrap();
@@ -224,17 +224,17 @@ pub fn make_row(idx: i32, n: i32) -> web_sys::Element {
 }
 ```
 
-``` typescript
+```typescript
 function makeCell() {
-  const cell = document.createElement("div");
-  cell.className = "cell";
+  const cell = document.createElement('div');
+  cell.className = 'cell';
   return cell;
 }
 
 function makeRow(idx: number, n: number) {
-  const row = document.createElement("div");
-  row.className = "row";
-  row.setAttribute("data-row-idx", idx.toString());
+  const row = document.createElement('div');
+  row.className = 'row';
+  row.setAttribute('data-row-idx', idx.toString());
   for (let i = 0; i < n; i++) {
     row.appendChild(makeCell());
   }
@@ -242,38 +242,38 @@ function makeRow(idx: number, n: number) {
 }
 
 const wasmTime = getTime(() => {
-  const app = document.querySelector("#app")!;
+  const app = document.querySelector('#app')!;
   for (let i = 0; i < 100; i++) {
     app.appendChild(wasm.makeRow(i, 1000));
   }
 }, 1);
 const jsTime = getTime(() => {
-  const app = document.querySelector("#app")!;
+  const app = document.querySelector('#app')!;
   for (let i = 0; i < 100; i++) {
     app.appendChild(makeRow(i, 1000));
   }
 }, 1);
 
 // 성능 측정
-console.log("[wasm]", wasmTime, "ms"); // [wasm] 685.30 ms
-console.log("[js]", jsTime, "ms"); // [js] 228.10 ms
+console.log('[wasm]', wasmTime, 'ms'); // [wasm] 685.30 ms
+console.log('[js]', jsTime, 'ms'); // [js] 228.10 ms
 
 const wasmTime2 = getTime(() => {
-  const app = document.querySelector("#app")!;
+  const app = document.querySelector('#app')!;
   for (let i = 0; i < 100; i++) {
     app.appendChild(wasm.makeRow(i, 100));
   }
 }, 1);
 const jsTime2 = getTime(() => {
-  const app = document.querySelector("#app")!;
+  const app = document.querySelector('#app')!;
   for (let i = 0; i < 100; i++) {
     app.appendChild(makeRow(i, 100));
   }
 }, 1);
 
 // 성능 측정
-console.log("[wasm]", wasmTime2, "ms"); // [wasm] 135.60 ms
-console.log("[js]", jsTime2, "ms"); // [js] 14.40 ms
+console.log('[wasm]', wasmTime2, 'ms'); // [wasm] 135.60 ms
+console.log('[js]', jsTime2, 'ms'); // [js] 14.40 ms
 ```
 
 Rust의 `web_sys` crate 에서 제공하는 DOM api wrapper 를 이용해 `row` 엘리먼트와 `cell` 엘리먼트를 만들어 자식 엘리먼트로 붙여주는 코드입니다. 1000 개의 cell을 만들어 `#app` 셀렉터를 가진 노드에 붙여주고 있습니다. 하지만 이런 DOM api 접근 역시 웹 어셈블리가 자바스크립트보다 느립니다.
@@ -282,7 +282,7 @@ Rust의 `web_sys` crate 에서 제공하는 DOM api wrapper 를 이용해 `row` 
 
 ## BFS 알고리즘 구현
 
-``` rust
+```rust
 // algo.rs
 // Rust로 작성한 bfs 탐색 알고리즘 코드
 use std::collections::VecDeque;
@@ -339,7 +339,7 @@ pub fn find_path(pixel_map: js_sys::Uint8Array) {
 }
 ```
 
-``` typescript
+```typescript
 // algo.ts
 // bfs 탐색 알고리즘 구현 코드
 import { getIndex } from './index';
@@ -348,7 +348,12 @@ export const WIDTH = 1000;
 export const HEIGHT = 1000;
 
 const VISITED = new Array(WIDTH * HEIGHT + 1).fill(false);
-const MOVES = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+const MOVES = [
+  [1, 0],
+  [0, 1],
+  [-1, 0],
+  [0, -1],
+];
 
 export function search(ix: number, iy: number, arr: Uint8Array) {
   const array = Array.from(arr);
@@ -364,9 +369,11 @@ export function search(ix: number, iy: number, arr: Uint8Array) {
     for (const [dx, dy] of MOVES) {
       const nx = x + dx;
       const ny = y + dy;
-      if (nx < 0 || ny < 0) { continue; }
+      if (nx < 0 || ny < 0) {
+        continue;
+      }
 
-      const next = getIndex(nx , ny);
+      const next = getIndex(nx, ny);
       const inBoundary = 0 < next && next < WIDTH * HEIGHT;
       if (inBoundary && !VISITED[next] && array[next] !== 1) {
         queue.push([nx, ny]);
@@ -377,7 +384,7 @@ export function search(ix: number, iy: number, arr: Uint8Array) {
 }
 ```
 
-``` typescript
+```typescript
 import { WIDTH, HEIGHT, search } from './algo';
 
 // pixelMap 배열 생성
@@ -392,15 +399,15 @@ export const pixelMap = new Uint8Array(WIDTH * HEIGHT);
 const wasmTime = getTime(() => {
   wasm.findPath(pixelMap);
 }, 1);
-console.log("[wasm]", wasmTime, "ms"); // [wasm] 2295.90 ms
+console.log('[wasm]', wasmTime, 'ms'); // [wasm] 2295.90 ms
 
 const jsTime = getTime(() => {
   search(0, 0, pixelMap);
 }, 1);
-console.log("[js]", jsTime, "ms"); // [js] 152.60 ms
+console.log('[js]', jsTime, 'ms'); // [js] 152.60 ms
 ```
 
-주석에서 설명한 것과 같이, 1000 * 1000 크기의 배열을 선언해, 이를 탐색합니다. 이때 배열의 값이 0이라면 이동할 수 있는 픽셀, 1이라면 이동할 수 없는 픽셀이라 간주합니다. 1,000,000 개의 픽셀을 bfs 알고리즘으로 모두 탐색했을 때 걸리는 시간을 측정했습니다.
+주석에서 설명한 것과 같이, 1000 \* 1000 크기의 배열을 선언해, 이를 탐색합니다. 이때 배열의 값이 0이라면 이동할 수 있는 픽셀, 1이라면 이동할 수 없는 픽셀이라 간주합니다. 1,000,000 개의 픽셀을 bfs 알고리즘으로 모두 탐색했을 때 걸리는 시간을 측정했습니다.
 
 결과는 자바스크립트 152.60 ms, 웹 어셈블리 2295.90 ms 입니다. 이쯤되니 뭔가 이상합니다. 테스트 환경은 모두 chromium 기반 브라우저인 brave browser 에서 시행되었습니다. 브라우저에 따라 뭔가 바뀌는 점이 있는지 알아보기 위해 사파리 브라우저에서 실행해보았습니다. 결과는 웹 어셈블리가 자바스크립트보다 빨랐습니다.
 
@@ -424,7 +431,7 @@ console.log("[js]", jsTime, "ms"); // [js] 152.60 ms
 
 ![chrome-devtools-on](./chrome-devtools-on.png)
 
-개발자 도구를 껐을 때(위)는 웹 어셈블리 코드가 약 723 ms, 켜놓은 채(아래)로 코드를 실행했을 때에는 2276 ms 에 실행되었습니다. 이전 사파리 브라우저에서 실행된 것과는 정 반대의 결과입니다. 이에 대한 이유는 알아낼 수 없었습니다. [여기에 소개된](https://www.secmem.org/blog/2020/02/19/How-to-use-wasm-with-Rust/)것과 같이 N-Queen 알고리즘의 성능측정 케이스는 크롬에서도 웹 어셈블리가 더 빨랐지만, 이것이 어떠한 기준을 가지는지 정확하게 알 수 없었습니다. 
+개발자 도구를 껐을 때(위)는 웹 어셈블리 코드가 약 723 ms, 켜놓은 채(아래)로 코드를 실행했을 때에는 2276 ms 에 실행되었습니다. 이전 사파리 브라우저에서 실행된 것과는 정 반대의 결과입니다. 이에 대한 이유는 알아낼 수 없었습니다. [여기에 소개된](https://www.secmem.org/blog/2020/02/19/How-to-use-wasm-with-Rust/)것과 같이 N-Queen 알고리즘의 성능측정 케이스는 크롬에서도 웹 어셈블리가 더 빨랐지만, 이것이 어떠한 기준을 가지는지 정확하게 알 수 없었습니다.
 
 ## 마치며
 

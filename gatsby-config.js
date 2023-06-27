@@ -1,7 +1,7 @@
 module.exports = {
-  pathPrefix: "/rudy3091.me",
+  pathPrefix: '/rudy3091.me',
   siteMetadata: {
-    siteUrl: "https://rudy3091.com",
+    siteUrl: 'https://rudy3091.com',
     title: "rudy3091's page",
   },
   plugins: [
@@ -13,7 +13,7 @@ module.exports = {
       },
     },
     {
-      resolve: "gatsby-plugin-react-svg",
+      resolve: 'gatsby-plugin-react-svg',
       options: {
         rule: {
           include: /images$/,
@@ -23,15 +23,15 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        name: "posts",
+        name: 'posts',
         path: `${__dirname}/posts/`,
       },
     },
-    "gatsby-plugin-styled-components",
-    "gatsby-plugin-react-helmet",
-    "gatsby-plugin-sitemap",
+    'gatsby-plugin-styled-components',
+    'gatsby-plugin-react-helmet',
+    'gatsby-plugin-sitemap',
     {
-      resolve: "gatsby-transformer-remark",
+      resolve: 'gatsby-transformer-remark',
       options: {
         plugins: [
           `gatsby-remark-relative-images`,
@@ -44,15 +44,15 @@ module.exports = {
         ],
       },
     },
-    "gatsby-plugin-sharp",
-    "gatsby-transformer-sharp",
+    'gatsby-plugin-sharp',
+    'gatsby-transformer-sharp',
     {
-      resolve: "gatsby-source-filesystem",
+      resolve: 'gatsby-source-filesystem',
       options: {
-        name: "pages",
-        path: "./src/pages/",
+        name: 'pages',
+        path: './src/pages/',
       },
-      __key: "pages",
+      __key: 'pages',
     },
   ],
 };

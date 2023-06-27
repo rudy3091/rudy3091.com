@@ -1,8 +1,8 @@
 ---
-title: "strict mode"
-slug: "posts/strict-mode"
-date: "2021-09-28"
-author: "김현민 @rudy3091"
+title: 'strict mode'
+slug: 'strict-mode'
+date: '2021-09-28'
+author: '김현민 @rudy3091'
 ---
 
 자바스크립트 소스코드를 보다보면 파일 최상단에 `"use strict"` 가 쓰여있는 것을 볼 수 있습니다. 결론부터 말하자면, 이 뜬금없는 문자열은 자바스크립트의 `strict mode`를 사용하기 위해 사용되었습니다. 이번 포스트에서는 이 strict mode가 무엇인지 알아본 결과를 정리해보았습니다.
@@ -15,14 +15,14 @@ author: "김현민 @rudy3091"
 
 스펙에 따르면 ECMAScript *스크립트*는 unrestricted(non-strict) mode 또는 strict mode를 사용하여 처리됩니다. 코드가 strict mode로 인터프리팅되는 경우는 아래와 같습니다.
 
-1. 전역 코드가 `Use Strict Directive`가 포함된  `Directive Prologue`(이하 *"use strict"*)로 시작되는 경우
+1. 전역 코드가 `Use Strict Directive`가 포함된 `Directive Prologue`(이하 _"use strict"_)로 시작되는 경우
 2. 모듈 코드인 경우
-3. *클래스 선언문* 또는 *클래스 표현문* 내부의 코드인 경우
-4. *"use strict"* 로 시작하는 `Eval code` 인 경우
+3. _클래스 선언문_ 또는 _클래스 표현문_ 내부의 코드인 경우
+4. _"use strict"_ 로 시작하는 `Eval code` 인 경우
 5. eval 함수가 strict mode에서 `direct eval` 로 호출된 경우
-6. 관련 함수선언 (*FunctionDeclaration/Expression*, *GeneratorDeclaration/Expression* 등)이 strict mode 코드에서 이뤄진 경우의 함수 코드
+6. 관련 함수선언 (_FunctionDeclaration/Expression_, _GeneratorDeclaration/Expression_ 등)이 strict mode 코드에서 이뤄진 경우의 함수 코드
 7. 함수의 `[[ECMAScriptCode]]` 라는 `internal slot`값을 만들어내는 코드가 *"use strict"*로 시작하는 경우의 함수 코드
-8. 빌트인 함수 객체 Function, Generator의 생성자의 마지막 인자로 전달되는 문자열이 *"use strict"* 로 시작하는 *FunctionBody*로 평가될 경우
+8. 빌트인 함수 객체 Function, Generator의 생성자의 마지막 인자로 전달되는 문자열이 _"use strict"_ 로 시작하는 *FunctionBody*로 평가될 경우
 
 하나씩 살펴보겠습니다.
 
@@ -32,7 +32,7 @@ author: "김현민 @rudy3091"
 
 ![strict-mode](./directive.png)
 
-*Directive Prologue*는 정의에 따르면 *FunctionBody*, *ScriptBody*, *ModuleBody* 의 *StatementListItem* 또는 *ModuleItem*의 최상단에 위치하며, *StringLiteral*과 세미콜론(`;`)으로 이루어진 *ExpressionStatement*이라고 합니다*.* 쉽게말해, 파일 또는 함수의 제일 첫 줄에 쓰여진 문자열 하나입니다. 우리가 알고있던 "use strict"의 형태와 일치합니다.
+*Directive Prologue*는 정의에 따르면 _FunctionBody_, _ScriptBody_, _ModuleBody_ 의 _StatementListItem_ 또는 *ModuleItem*의 최상단에 위치하며, *StringLiteral*과 세미콜론(`;`)으로 이루어진 *ExpressionStatement*이라고 합니다*.* 쉽게말해, 파일 또는 함수의 제일 첫 줄에 쓰여진 문자열 하나입니다. 우리가 알고있던 "use strict"의 형태와 일치합니다.
 
 그 중에서도 특히 "use strict" 또는 'use strict'를 Use Strict Directive 라고 의미하는데, `\t`, `\n`와 같은 *EscapeSequence*와 *LineContinuation*을 포함하면 안된다고 합니다. 우리가 흔히 볼 수 있었던 "use strict" 외에도 다른 directive들을 사용하는 경우가 있습니다(TMI 1 참조).
 
@@ -63,7 +63,7 @@ globalEval(`console.log('hello');`); // indirect eval
 eval(`console.log('hello');`); // direct eval
 ```
 
-### 6. 관련 함수선언 (*FunctionDeclaration/Expression*, *GeneratorDeclaration/Expression* 등)이 strict mode 코드에서 이뤄진 경우의 함수 코드
+### 6. 관련 함수선언 (_FunctionDeclaration/Expression_, _GeneratorDeclaration/Expression_ 등)이 strict mode 코드에서 이뤄진 경우의 함수 코드
 
 이 경우는 간단합니다. 함수의 선언식과 표현식의 평가가 "use strict"를 사용한 컨텍스트에서 이뤄질 경우 그 함수의 body 역시 strict mode로 처리됩니다.
 
@@ -78,16 +78,15 @@ eval(`console.log('hello');`); // direct eval
 위 사진은 ES2015 스펙에서 정의하고 있는 함수 객체 명세입니다. 사진의 아래쪽에 [[ECMAScriptCode]] 라는 항목이 보입니다. 설명을 읽어보면 [[ECMAScriptCode]]는
 
 > 함수 몸체를 정의하는 파싱된 소스코드의 루트노드
-> 
 
-라고 합니다. 이제 뭔가 감이 옵니다. *함수의 [[ECMAScriptCode]] 라는 internal slot값을 만들어내는 코드가 "use strict"로 시작하는 경우의 함수 코드* 라는 말은 *함수 몸체의 코드가 "use strict" 로 시작하는 경우의 함수 코드* 와 동일한 의미로 느껴집니다. 또한 이러한 경우의 *함수 코드* 라는 말이 있기 때문에 그 범위가 함수 내부로 제한됨을 동시에 의미하고 있습니다. 이 구절은 흔히 알고있던 함수 범위의 "use strict" 사용에 관한 내용과 일치합니다.
+라고 합니다. 이제 뭔가 감이 옵니다. _함수의 [[ECMAScriptCode]] 라는 internal slot값을 만들어내는 코드가 "use strict"로 시작하는 경우의 함수 코드_ 라는 말은 _함수 몸체의 코드가 "use strict" 로 시작하는 경우의 함수 코드_ 와 동일한 의미로 느껴집니다. 또한 이러한 경우의 _함수 코드_ 라는 말이 있기 때문에 그 범위가 함수 내부로 제한됨을 동시에 의미하고 있습니다. 이 구절은 흔히 알고있던 함수 범위의 "use strict" 사용에 관한 내용과 일치합니다.
 
-### 8. 빌트인 함수 객체 Function, Generator의 생성자의 마지막 인자로 전달되는 문자열이 *"use strict"* 로 시작하는 *FunctionBody*로 평가될 경우
+### 8. 빌트인 함수 객체 Function, Generator의 생성자의 마지막 인자로 전달되는 문자열이 _"use strict"_ 로 시작하는 *FunctionBody*로 평가될 경우
 
 마지막으로 함수를 생성할 때, 일반적인 방법이 아닌 `window.Function()`, `Generator()`를 이용하는 방법입니다. 이 방법으로 함수를 선언하는 것은 흔히 사용되는 방법은 아니고, 여러 문제를 야기할 수도 있습니다. 또한 Generator function은 ES2015에서 도입된 함수입니다. Generator 관련 내용은 여기서 다룰 내용이 아니라 넘어가도록 하겠습니다. Generator 객체는 generator function으로부터 반환된 값입니다. 이 Generator()는 일반적인 방법으론 사용할 수 없고 아래와 같은 방법으로 선언해야 사용할 수 있습니다. 이때 일반 함수와 동작 방식이 조금 다르지만, 제대로 알아보기 위해서 알아야 할 내용이 많기 때문에 넘어가도록 하겠습니다(사실 잘 모릅니다).
 
 ```jsx
-const Generator = Object.getPrototypeOf(function*(){}).constructor;
+const Generator = Object.getPrototypeOf(function* () {}).constructor;
 const g = new Generator('x', 'y', 'yield x + y');
 const iter = g(1, 2);
 console.log(iter.next()); // { value: 3, done: true }
@@ -106,14 +105,14 @@ console.log(iter.next()); // { value: 3, done: true }
 ```jsx
 // non-strict mode
 if (!window.hello) {
-	hello = 'Hello world!';
+  hello = 'Hello world!';
 }
 console.log(hello); // hello world
 
 // - - -
 // strict mode
 if (!window.hello) {
-	hello = 'Hello world!';
+  hello = 'Hello world!';
 }
 console.log(hello); // Uncaught ReferenceError: hello is not defined
 ```
@@ -123,7 +122,7 @@ mdn에 따르면 이로 인해 한때 아마존의 홈페이지에 화면이 렌
 ```jsx
 // strict mode
 if (!window.hello) {
-	window.hello = 'Hello world!';
+  window.hello = 'Hello world!';
 }
 console.log(hello); // Hello world!
 ```
@@ -159,13 +158,13 @@ strict mode에서는 함수 파라미터의 중복을 금지합니다. 당연한
 ```jsx
 // non-strict mode
 function f(x, x) {
-	return x * 2;
+  return x * 2;
 }
 console.log(f(2, 4)); // 4
 
 // strict mode
 function f(x, x) {
-	return x * 2;
+  return x * 2;
 }
 console.log(f(2, 4)); // Uncaught SyntaxError: Duplicate parameter name not allowed in this context
 ```
@@ -173,7 +172,7 @@ console.log(f(2, 4)); // Uncaught SyntaxError: Duplicate parameter name not allo
 strict mode에서는 객체의 프로퍼티 중복 역시 허용하지 않습니다. 다만, 이것은 ES2015 이전의 이야기입니다. ES2015 이후부터는 strict mode에서도 객체의 프로퍼티 중복을 허용합니다.
 
 ```jsx
-"use strict";
+'use strict';
 const o1 = { x: 1, y: 2 };
 const o2 = { ...o1, x: 10 };
 console.log(o2); // { x: 10, y: 2 }
@@ -188,7 +187,7 @@ strict mode를 사용하면 자바스크립트의 가장 어려운 개념들 중
 ```jsx
 // non-strict mode
 function callThis() {
-	console.log(this);
+  console.log(this);
 }
 callThis(); // Window { window: Window, self: Window ... }
 ```
@@ -197,9 +196,9 @@ strict mode에서 this는 undefined가 됩니다.
 
 ```jsx
 // strict mode
-"use strict"
+'use strict';
 function callThis() {
-	console.log(this);
+  console.log(this);
 }
 callThis(); // undefined
 ```
@@ -260,13 +259,13 @@ console.log(add(4, 5); // 9
 
 "use strict"는 파일 또는 함수의 가장 첫번째에 쓰여있어야 한다고 명시되어 있습니다. 이것과 반대되는 개념으로 tail call 이라는 개념이 ES2015 스펙에 명시되어 있습니다. 이 개념이 중요한 이유는 Tail call optimization이라는 최적화 기법과 관련되어 있기 때문입니다. Tail call optimization의 바탕이 되는 tail position이란 개념은 strict mode 코드에서만 정의되기 때문에, Tail call optimization 기법이 적용되기 위해선 "use strict" 를 선언해야 합니다.
 
-Tail call optimization은 **특정 조건에서** 함수를 호출한 쪽의 콜스택을 호출의 대상이 되는 함수가 재사용하는 것을 말합니다. 재귀함수를 호출할 때, 종료 조건을 잘못 지정하는 등의 이유로 *Maximum call stack size exeeded* 에러가 생겼던 경험이 있을 것입니다. Tail call optimization 은 함수의 tail position 에서 실행되는 코드가 tail call 이라면 콜스택을 재사용하도록 하여 이러한 에러를 막습니다.
+Tail call optimization은 **특정 조건에서** 함수를 호출한 쪽의 콜스택을 호출의 대상이 되는 함수가 재사용하는 것을 말합니다. 재귀함수를 호출할 때, 종료 조건을 잘못 지정하는 등의 이유로 _Maximum call stack size exeeded_ 에러가 생겼던 경험이 있을 것입니다. Tail call optimization 은 함수의 tail position 에서 실행되는 코드가 tail call 이라면 콜스택을 재사용하도록 하여 이러한 에러를 막습니다.
 
 [이 페이지](https://kangax.github.io/compat-table/es6/)에서 볼 수 있듯 현재(2021년 10월) Tail call optimization을 지원하는 브라우저는 사파리가 유일합니다. 대부분의 자바스크립트 개발자들이 이 기능 없이도 잘먹고 잘살고 있기 때문입니다. 사파리에서도 strict mode 를 사용해야만 Tail call optimization이 적용된다고 합니다. 아래 코드는 팩토리얼을 계산하는 함수를 tail call 을 사용하는 방법과 그렇지 않은 두가지 방법으로 선언해 이를 확인한 결과입니다.
 
 ![safari](./safari.png)
 
-tail position 에서 함수를 호출한 `facAcc` 함수는 파라미터로 100,000을 전달해도 잘 동작합니다. 반면 `fac` 함수는 tail position에서 함수를 호출했지만 * 연산자가 사용되어 tail call 이 아니게 되어 stack overflow 에러가 발생하게 됩니다. Tail call optimization 에 관한 자세한 설명과 tail call 을 가질 수 있는 연산자에 대한 설명은 [이 포스트에서](https://2ality.com/2015/06/tail-call-optimization.html) 찾아볼 수 있습니다.
+tail position 에서 함수를 호출한 `facAcc` 함수는 파라미터로 100,000을 전달해도 잘 동작합니다. 반면 `fac` 함수는 tail position에서 함수를 호출했지만 \* 연산자가 사용되어 tail call 이 아니게 되어 stack overflow 에러가 발생하게 됩니다. Tail call optimization 에 관한 자세한 설명과 tail call 을 가질 수 있는 연산자에 대한 설명은 [이 포스트에서](https://2ality.com/2015/06/tail-call-optimization.html) 찾아볼 수 있습니다.
 
 ## 레퍼런스
 
@@ -276,7 +275,7 @@ ES2015 명세 - directive prologues: [https://262.ecma-international.org/6.0/#se
 what is prologue directives: [https://stackoverflow.com/questions/28802885/what-is-prologue-directives](https://stackoverflow.com/questions/28802885/what-is-prologue-directives)  
 ES2015 명세 - internal slot: [https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots](https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots)  
 ES2015 명세 - [[ECMAScriptCode]]: [https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots](https://262.ecma-international.org/6.0/#sec-object-internal-methods-and-internal-slots)  
-mdn - generator: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/function*](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/function*)  
+mdn - generator: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/function\*](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Statements/function*)  
 mdn - Generator Function: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/GeneratorFunction)  
 what is an "internal slot" of an object in Javascript: [https://stackoverflow.com/questions/33075262/what-is-an-internal-slot-of-an-object-in-javascript](https://stackoverflow.com/questions/33075262/what-is-an-internal-slot-of-an-object-in-javascript)  
 ES2015 명세 - appendix C: The Strict Mode of ECMAScript: [https://www.notion.so/strict-mode-a3023853aefe44e98efd7f4ae33fa46c#d9fb2212da014bbdbae4c73f5d1a261d]()  
@@ -287,4 +286,4 @@ Content-Security-Policy - script-src: [https://developer.mozilla.org/ko/docs/Web
 wikipedia - meta programming: [https://en.wikipedia.org/wiki/Metaprogramming](https://en.wikipedia.org/wiki/Metaprogramming)  
 ES2015 명세 - tail position calls: [https://262.ecma-international.org/6.0/#sec-tail-position-calls](https://262.ecma-international.org/6.0/#sec-tail-position-calls)  
 tail call optimization: [https://2ality.com/2015/06/tail-call-optimization.html](https://2ality.com/2015/06/tail-call-optimization.html)  
-TCO 브라우저 지원: [https://kangax.github.io/compat-table/es6/#test-proper_tail_calls_(tail_call_optimisation)](https://kangax.github.io/compat-table/es6/#test-proper_tail_calls_(tail_call_optimisation))
+TCO 브라우저 지원: [https://kangax.github.io/compat-table/es6/#test-proper*tail_calls*(tail_call_optimisation)](<https://kangax.github.io/compat-table/es6/#test-proper_tail_calls_(tail_call_optimisation)>)

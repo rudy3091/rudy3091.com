@@ -1,8 +1,8 @@
 ---
-title: "module system in javascript"
-author: "김현민 @rudy3091"
-date: "2021-10-14"
-slug: "posts/module-system-in-js"
+title: 'module system in javascript'
+author: '김현민 @rudy3091'
+date: '2021-10-14'
+slug: 'module-system-in-js'
 ---
 
 프로그램의 크기가 커지면 필연적으로 하나의 파일을 여러 개로 나누게 됩니다. 이때 분리된 파일 하나하나를 `모듈`이라고 하는데, 모듈들 간에는 독립성이 보장되어야 합니다. 이러한 모듈 시스템은 프로그래밍 언어가 범용적인 목적으로 사용되기 위한 필수 조건들 중 하나입니다. 우리가 사용하는 자바스크립트에는 ES2015 이전버전까지 공식적인 모듈 지원이 없었습니다. 이에 프로그래머들은 직접 모듈 시스템을 구현하여 사용했습니다. 이번 포스트에서는 이러한 모듈 시스템의 종류와 사용법에 대해 알아본 결과를 공유합니다. 각 모듈 시스템별 예제는 [깃허브 저장소](https://github.com/rudy3091/modules-in-js)에서 확인하실 수 있습니다.
@@ -13,22 +13,22 @@ slug: "posts/module-system-in-js"
 
 모듈은 기본적으로 자신만의 실행 영역이 있어야 합니다. 이를 `스코프`라고 부릅니다. 서버사이드 자바스크립트에서는 파일 스코프가 있기 때문에 파일 하나를 모듈 하나로 간주합니다. 따라서 다른 파일에 같은 이름으로 변수를 선언해도 전역변수가 겹치지 않고, 두 파일 사이에 데이터 교환이 필요할 때에는 exports라는 전역 객체를 이용합니다.
 
-``` javascript
+```javascript
 // calculator.js
 exports.add = function (a, b) {
   return a + b;
-}
+};
 
 exports.sub = function (a, b) {
   return a - b;
-}
+};
 
 exports.mul = function (a, b) {
   return a * b;
-}
+};
 ```
 
-``` javascript
+```javascript
 // index.js
 var calculator = require('./calculator');
 
@@ -44,16 +44,19 @@ console.log('multiplying 8 and 3 =', calculator.mul(8, 3));
 
 이를 해결하기 위해 CommonJS 그룹은 모듈을 `require.define()` 함수로 감싸는 방법을 도입했습니다. 이는 CommonJS 공식 위키의 `Transport/D`에 정리되어 있습니다. [링크](http://wiki.commonjs.org/wiki/Modules/Transport/D)에서 다른 패턴을 추가로 확인할 수 있습니다.
 
-``` javascript
+```javascript
 // 공식 위키의 예제
-require.define({
-  "math/add": function(require, exports, module) {
-    var sum = require("./general").sum;
-    exports.plusTwo = function(a) {
-      return sum(a, 2);
-    };
-  }
-}, ["math/general"]); // 이 모듈이 가지는 의존성 모듈들
+require.define(
+  {
+    'math/add': function (require, exports, module) {
+      var sum = require('./general').sum;
+      exports.plusTwo = function (a) {
+        return sum(a, 2);
+      };
+    },
+  },
+  ['math/general'],
+); // 이 모듈이 가지는 의존성 모듈들
 ```
 
 이외의 자세한 CommonJS 모듈 스펙은 [공식 위키](http://wiki.commonjs.org/wiki/Modules/1.1)에서 확인할 수 있습니다.
@@ -73,21 +76,21 @@ define(id?, dependencies?, factory);
 첫 번째 파라미터 `id`는 모듈을 식별하는데 사용됩니다. 두번째 파라미터 `dependencies`는 정의하려는 모듈이 의존성을 가지는 모듈을 지정합니다. 이 모듈들은 세번째 파라미터인 `factory()` 함수의 인자로 넘겨집니다. 두 번째 인자를 생략하면, 기본적으로 `['require', 'exports', 'module']`이라는 이름들이 할당됩니다. 이 이름들은 CommonJS 모듈에서 각각의 이름을 가진 객체들이 하는 역할과 동일합니다. `factory()` 함수는 모듈이나 객체를 인스턴스화 하는 실제 구현을 담당합니다. 전달된 파라미터가 함수라면 한번만 실행됨이 보장되며, 반환값을 exports 객체의 프로퍼티로 할당하고, 객체라면 바로 exports 객체의 속성으로 할당합니다. 아래는 AMD 모듈로 정의한 간단한 예제입니다.
 
 ```javascript
-define("calculator", ["require", "exports", "arithmetic"], function (
+define('calculator', ['require', 'exports', 'arithmetic'], function (
   require,
   exports,
-  arithmetic
+  arithmetic,
 ) {
   exports.add = function (a, b) {
     // require를 통해 얻어온 arithmetic 모듈을 사용
-    return require("arithmetic").addTwo(a, b);
+    return require('arithmetic').addTwo(a, b);
   };
 });
 ```
 
 모듈을 정의하기만 하고 끝이 아닙니다. 실제로 사용하기 위해선 모듈 로더가 필요합니다. AMD의 모듈 로더 중 가장 인지도가 높은 것들 중 하나는 `RequireJS`입니다. _브라우저에서도 require를 사용하고 싶은데 어떻게 하나요?_ 의 질문에 _RequireJS를 사용하세요_ 라고 답하는 것을 본 적이 있을 것입니다. 여기서 말하는 RequireJS가 바로 이것입니다. 사용 예제를 보겠습니다.
 
-``` html
+```html
 // index.html
 <body>
   <script src="./require.min.js"></script>
@@ -96,7 +99,7 @@ define("calculator", ["require", "exports", "arithmetic"], function (
 </body>
 ```
 
-``` javascript
+```javascript
 // index.js
 //
 // amd 모듈을 이용한 calculator 모듈 로드
@@ -104,17 +107,17 @@ define("calculator", ["require", "exports", "arithmetic"], function (
 // index.html 에서 script 태그를 이용해 calculator.js 보다
 // index.js를 먼저 불러왔지만 정상적으로 동작함
 //
-require(['calculator'], function(calculator) {
+require(['calculator'], function (calculator) {
   console.log(calculator.add(4, 5)); // 9
   document.write(calculator.add(3, 2)); // 5
-})
+});
 
 // amd 모듈을 사용하지 않고 아래처럼 사용할 경우 에러 발생
 //
 // console.log(calculator.sub(4, 2));
 ```
 
-``` javascript
+```javascript
 // calculator.js
 //
 // amd 모듈을 이용한 calculator 모듈 export
@@ -123,23 +126,23 @@ require(['calculator'], function(calculator) {
 // 이름으로 export함
 //
 define('calculator', {
-  add: function(x, y) {
+  add: function (x, y) {
     return x + y;
   },
-  sub: function(x, y) {
+  sub: function (x, y) {
     return x - y;
   },
-  mul: function(x, y) {
+  mul: function (x, y) {
     return x * y;
-  }
-})
+  },
+});
 ```
 
 `index.html`에선 세 개의 자바스크립트 파일을 사용합니다. 가장 먼저 모듈 로더의 역할을 하는 `require.min.js`입니다. 이 스크립트를 가장 먼저 로드해야 이후에 `define`과 `require`같은 함수들을 사용할 수 있습니다. 다음으로는 `index.js` 파일을 가져옵니다. 여기서, index.js 에는 AMD 모듈의 require 함수를 사용하고 있습니다. 위에서 언급한 것과 같이 `'calculator'`라는 이름을 가지는 모듈을 가져오고, 다음 파라미터로 전달되는 함수에서 이 모듈을 calculator 라는 변수로 사용하고 있습니다. 이 calculator는`calculator.js`에서 정의된 객체입니다. define 함수를 사용해 두 번째 인자로 전달된 객체를 `'calculator'`라는 이름으로 export 하고 있습니다.
 
 index.html 파일에서 script 태그의 순서를 보면 index.js 파일이 먼저 오고, 이후에 calculator.js 파일이 선언되었습니다. 원래대로라면, index.js의 파일에 있는 내용들을 calculator.js 에서 사용할 수 있어야 하고, calculator.js에 선언된 내용들은 index.js에서 사용할 수 없습니다. 하지만 RequireJS이 모듈 시스템을 만들어 순서에 상관없이 변수와 함수들을 import/export 하여 사용할 수 있게 됩니다.
 
-``` html
+```html
 <body>
   <script>
     setTimeout(() => console.log(1), 0);
@@ -154,7 +157,7 @@ index.html 파일에서 script 태그의 순서를 보면 index.js 파일이 먼
 
 ![requirejs-settimeout](./requirejs-settimeout.png)
 
- 위 코드와 같이 setTimeout 함수의 콜백함수는 현재 실행중인 콜스택이 모두 종료된 뒤에 실행됩니다. RequireJS의 동작은 이렇게 브라우저의 setTimeout 함수를 이용해 구현된 것으로 보입니다(**뇌피셜입니다**).
+위 코드와 같이 setTimeout 함수의 콜백함수는 현재 실행중인 콜스택이 모두 종료된 뒤에 실행됩니다. RequireJS의 동작은 이렇게 브라우저의 setTimeout 함수를 이용해 구현된 것으로 보입니다(**뇌피셜입니다**).
 
 ## UMD 모듈
 
@@ -164,47 +167,47 @@ index.html 파일에서 script 태그의 순서를 보면 index.js 파일이 먼
 
 UMD 패턴에는 많은 종류의 바리에이션이 존재합니다. 이 목록은 역시 [umdjs 저장소](https://github.com/umdjs/umd/blob/master/templates)에서 확인할 수 있습니다. 간단히 `amdWeb.js`의 패턴을 분석해보겠습니다.
 
-``` javascript
+```javascript
 // amdWeb.js: https://github.com/umdjs/umd/blob/master/templates/amdWeb.js
 
 // iife 패턴을 사용
 // root 에는 global 객체, factory 자리에는 factory 함수가 들어감
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // AMD 모듈
-        define(['b'], factory);
-    } else {
-        // AMD 모듈 로더 없음, 전역 객체의 프로퍼티로 모듈 등록
-        // 전역 객체의 b 프로퍼티에 등록된 모듈 제공, amdWeb이 등록되는 모듈 이름
-        root.amdWeb = factory(root.b);
-    }
-}(typeof self !== 'undefined' ? self : this, function (b) {
-    // 여기서 반환하는 값이 모듈의 export 프로퍼티가 됨
-    // AMD 모듈 로더가 없을 경우 파라미터는 의존성을 가지는 외부 모듈들
-    return {};
-}));
+  if (typeof define === 'function' && define.amd) {
+    // AMD 모듈
+    define(['b'], factory);
+  } else {
+    // AMD 모듈 로더 없음, 전역 객체의 프로퍼티로 모듈 등록
+    // 전역 객체의 b 프로퍼티에 등록된 모듈 제공, amdWeb이 등록되는 모듈 이름
+    root.amdWeb = factory(root.b);
+  }
+})(typeof self !== 'undefined' ? self : this, function (b) {
+  // 여기서 반환하는 값이 모듈의 export 프로퍼티가 됨
+  // AMD 모듈 로더가 없을 경우 파라미터는 의존성을 가지는 외부 모듈들
+  return {};
+});
 ```
 
 살펴보니 amdWeb 패턴은 AMD 모듈 또는 브라우저의 전역 객체를 이용해 모듈 시스템을 구현한 패턴입니다. 주석에 써놓은 것과 같이 AMD 모듈 로더가 없으면 브라우저의 전역 객체를, 있으면 AMD 모듈 로더를 이용해 모듈 시스템을 사용하고 있습니다. 이때 전역 객체는 `Web Worker` 환경 역시 지원하기 위해 `self` 를 사용하고 있습니다. `self`에 관한 자세한 설명은 [MDN의 설명](https://developer.mozilla.org/ko/docs/Web/API/Window/self)을 참고해주세요.
 
 amdWeb 패턴의 주석에서, nodejs 환경에서도 잘 동작하는 패턴을 알아보고 싶다면 `returnExports` 패턴을 참고하라고 합니다. `returnExports.js`을 열어봤습니다. 아래 코드가 그것입니다.
 
-``` javascript
+```javascript
 (function (root, factory) {
-    if (typeof define === 'function' && define.amd) {
-        // define 함수가 정의되어 있다면 AMD 모듈로 간주
-        define(['b'], factory);
-    } else if (typeof module === 'object' && module.exports) {
-        // nodejs 환경과 같이 module.exports 를 지원한다면 CommonJS 모듈로 간주
-        module.exports = factory(require('b'));
-    } else {
-        // 둘다 아니라면 전역 객체의 프로퍼티에 모듈 등록
-        // 전역객체의 b 프로퍼티에 등록된 모듈 제공, 등록되는 모듈이름은 returnExports
-        root.returnExports = factory(root.b);
-    }
-}(typeof self !== 'undefined' ? self : this, function (b) {
-    return {};
-}));
+  if (typeof define === 'function' && define.amd) {
+    // define 함수가 정의되어 있다면 AMD 모듈로 간주
+    define(['b'], factory);
+  } else if (typeof module === 'object' && module.exports) {
+    // nodejs 환경과 같이 module.exports 를 지원한다면 CommonJS 모듈로 간주
+    module.exports = factory(require('b'));
+  } else {
+    // 둘다 아니라면 전역 객체의 프로퍼티에 모듈 등록
+    // 전역객체의 b 프로퍼티에 등록된 모듈 제공, 등록되는 모듈이름은 returnExports
+    root.returnExports = factory(root.b);
+  }
+})(typeof self !== 'undefined' ? self : this, function (b) {
+  return {};
+});
 ```
 
 `define` 함수와 `module.exports` 가 존재하는지에 따라 AMD 혹은 CommonJS 모듈을 사용할지를 결정하고 있습니다. 관련 함수 또는 객체가 존재하는지 체크하고, 알맞은 모듈 시스템을 선택해 사용합니다. 사용법은 AMD와 CommonJS 모듈과 다를 게 없어 보입니다.
@@ -213,14 +216,14 @@ amdWeb 패턴의 주석에서, nodejs 환경에서도 잘 동작하는 패턴을
 
 ES6 모듈은 흔히 아는 것과 같이 ES2015 버전부터 추가된 자바스크립트의 공식 모듈 시스템입니다. 브라우저의 script 태그에 `type="module"`을 추가하기만 하면 사용할 수 있습니다. 모듈은 파일 단위로, `export` 키워드를 사용해 정의할 수 있고, 다른 모듈의 내용은 `import` 키워드를 사용해 가져올 수 있습니다.
 
-``` html
+```html
 <body>
   <script src="./index.js" type="module"></script>
   <script src="./calculator.js" type="module"></script>
 </body>
 ```
 
-``` javascript
+```javascript
 // index.js
 import { add, sub, mul } from './calculator.js';
 
@@ -229,7 +232,7 @@ console.log(sub(5, 4)); // 1;
 console.log(mul(3, 3)); // 9;
 ```
 
-``` javascript
+```javascript
 // calculator.js
 export function add(x, y) {
   return x + y;
@@ -258,7 +261,7 @@ ES2015 스펙에서 정의한 공식 모듈 시스템인 만큼, 스펙 문서�
 
 위에서 소개한 모듈 시스템들이 실제로 사용되는 예시를 찾아봤습니다.
 
-``` javascript
+```javascript
 (function(exportTarget) {
     var lcs_options = {
         nnb: true // nnb 荑좏궎 愿��� 泥섎━
@@ -288,7 +291,7 @@ ES2015 스펙에서 정의한 공식 모듈 시스템인 만큼, 스펙 문서�
 
 ![edwith-require](./edwith-browserfied.png)
 
-``` javascript
+```javascript
   ...
   if (entry.length) {
     // Expose entry point to Node, AMD or browser globals
@@ -313,7 +316,7 @@ ES2015 스펙에서 정의한 공식 모듈 시스템인 만큼, 스펙 문서�
   ...
 ```
 
-``` javascript
+```javascript
 ...
 "../node_modules/parcel-bundler/src/builtins/bundle-loader.js": [function(require, module, exports) {
   var getBundleURL = require('./bundle-url').getBundleURL;
@@ -340,7 +343,7 @@ naver d2 - JavaScript 표준을 위한 움직임: CommonJS와 AMD: [https://d2.n
 CommonJS spec - Modules/1.1: [http://wiki.commonjs.org/wiki/Modules/1.1](http://wiki.commonjs.org/wiki/Modules/1.1)  
 CommonJS - Module/Transport/D: [http://wiki.commonjs.org/wiki/Modules/Transport/D](http://wiki.commonjs.org/wiki/Modules/Transport/D)  
 requirejs - with comment: [https://requirejs.org/docs/release/2.3.6/comments/require.js](https://requirejs.org/docs/release/2.3.6/comments/require.js)  
-nodejs api docs - module: [https://nodejs.org/api/modules.html#modules\_exports\_shortcut](https://nodejs.org/api/modules.html#modules_exports_shortcut)  
+nodejs api docs - module: [https://nodejs.org/api/modules.html#modules_exports_shortcut](https://nodejs.org/api/modules.html#modules_exports_shortcut)  
 블로그 포스트 - UMD 패턴: [https://blog.rhostem.com/posts/2019-06-23-universal-module-definition-pattern](https://blog.rhostem.com/posts/2019-06-23-universal-module-definition-pattern)  
 github - umdjs/umd: [https://github.com/umdjs/umd](https://github.com/umdjs/umd)  
 ES2015 - modules: [https://262.ecma-international.org/6.0/#sec-modules](https://262.ecma-international.org/6.0/#sec-modules)

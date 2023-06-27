@@ -1,10 +1,9 @@
 ---
-title: "closure in javascript"
-author: "김현민 @rudy3091"
-date: "2021-09-19"
-slug: "posts/closure-in-javascript"
+title: 'closure in javascript'
+author: '김현민 @rudy3091'
+date: '2021-09-19'
+slug: 'closure-in-javascript'
 ---
-
 
 ## 개요
 
@@ -20,13 +19,13 @@ slug: "posts/closure-in-javascript"
 
 > a technique for implementing lexically scoped name binding in a language with first-class functions
 
-해석해보면, *일급 함수(first-class functions)를 가지는 프로그래밍 언어에서 렉시컬 스코프 상에서 이름을 바인딩하는 것을 구현하는 기술* 이라고 한다. 여기서 `일급 함수`란 함수를 변수에 저장할 수 있고, 함수의 반환값으로 사용할 수 있으며, 함수의 파라미터로 전달할 수 있는 것을 의미한다.
+해석해보면, _일급 함수(first-class functions)를 가지는 프로그래밍 언어에서 렉시컬 스코프 상에서 이름을 바인딩하는 것을 구현하는 기술_ 이라고 한다. 여기서 `일급 함수`란 함수를 변수에 저장할 수 있고, 함수의 반환값으로 사용할 수 있으며, 함수의 파라미터로 전달할 수 있는 것을 의미한다.
 
 위키피디아의 정의는 너무 복잡하게 들린다. mdn과 위키피디아의 두 정의에서 공통적으로 '함수'와 '렉시컬(어휘적)' 이라는 키워드가 나타난다. '렉시컬 환경', '렉시컬 스코프' 에서 사용되는 말이다. '렉시컬' 이라는 단어의 의미부터 알아봐야 할 것 같다.
 
 ## 렉시컬 환경
 
-자바스크립트에서 `렉시컬 환경`이란, ECMAScript 스펙에 명시되어있다. 정의에 따르면 렉시컬 환경이란 **중첩된 ECMAScript 코드의 구조에서 특정 변수들 및 함수들에 식별자가 어떻게 연관되어 있는지를 정의하기 위한 *specification type***이다. 이때 specification type이란 말의 의미는 자바스크립트에서 접근할 수 없고, 구현상에 존재하는 데이터라는 의미인 듯 하다. 실제로 자바스크립트 코드상에서 렉시컬 환경을 구성하는 `Environment Record`와 `outer` 포인터 등에 접근할 수단은 없다(라고 알고있다). 그냥 그렇게 구현되었다고 믿고 자바스크립트 코드를 쓰자. 크롬은 무적이고 v8엔진은 신이다.
+자바스크립트에서 `렉시컬 환경`이란, ECMAScript 스펙에 명시되어있다. 정의에 따르면 렉시컬 환경이란 **중첩된 ECMAScript 코드의 구조에서 특정 변수들 및 함수들에 식별자가 어떻게 연관되어 있는지를 정의하기 위한 _specification type_**이다. 이때 specification type이란 말의 의미는 자바스크립트에서 접근할 수 없고, 구현상에 존재하는 데이터라는 의미인 듯 하다. 실제로 자바스크립트 코드상에서 렉시컬 환경을 구성하는 `Environment Record`와 `outer` 포인터 등에 접근할 수단은 없다(라고 알고있다). 그냥 그렇게 구현되었다고 믿고 자바스크립트 코드를 쓰자. 크롬은 무적이고 v8엔진은 신이다.
 
 ## 렉시컬 스코프
 
@@ -115,12 +114,12 @@ h(); # global
 
 ```jsx
 function f() {
-	const x = 3;
-	function g(y) {
-		console.log(x + y);
-	}
-	g(4);
-	console.dir(g); // f g(y)
+  const x = 3;
+  function g(y) {
+    console.log(x + y);
+  }
+  g(4);
+  console.dir(g); // f g(y)
 }
 
 f(); // 7
@@ -134,15 +133,15 @@ f() 함수 안의 depth를 한단계 늘려보자.
 
 ```jsx
 function f() {
-	const x = 3;
-	function g(y) {
-		function h(z) {
-			console.log(x + y + z);
-		}
-		h(5);
-		console.dir(h); // f h(z)
-	}
-	g(4);
+  const x = 3;
+  function g(y) {
+    function h(z) {
+      console.log(x + y + z);
+    }
+    h(5);
+    console.dir(h); // f h(z)
+  }
+  g(4);
 }
 
 f(); // 12
@@ -170,14 +169,14 @@ g() 함수 안에서 h() 함수를 선언하고 이에 대한 정보를 출력�
 
 ```jsx
 for (var i = 0; i < 5; i++) {
-	setTimeout(() => console.log(i));
+  setTimeout(() => console.log(i));
 }
 // 5를 5번 출력
 
 for (var i = 0; i < 5; i++) {
-	(function (x) {
-		setTimeout(() => console.log(x));
-	})(i);
+  (function (x) {
+    setTimeout(() => console.log(x));
+  })(i);
 }
 // 0 1 2 3 4
 ```
@@ -188,11 +187,15 @@ for (var i = 0; i < 5; i++) {
 
 ```jsx
 function counter() {
-	let _count = 0; // private 변수 _count
-	return {
-		getCount() { return _count; },
-		increase() { _count += 1; }
-	};
+  let _count = 0; // private 변수 _count
+  return {
+    getCount() {
+      return _count;
+    },
+    increase() {
+      _count += 1;
+    },
+  };
 }
 
 const counter1 = counter();
@@ -252,7 +255,7 @@ console.log(counter2.getCount()); // 1
 
 [https://developer.mozilla.org/ko/docs/Web/JavaScript/Closures](https://developer.mozilla.org/ko/docs/Web/JavaScript/Closures)
 
-[https://en.wikipedia.org/wiki/Closure_(computer_programming)](https://en.wikipedia.org/wiki/Closure_(computer_programming))
+[https://en.wikipedia.org/wiki/Closure\_(computer_programming)](<https://en.wikipedia.org/wiki/Closure_(computer_programming)>)
 
 [https://docs.swift.org/swift-book/LanguageGuide/Closures.html](https://docs.swift.org/swift-book/LanguageGuide/Closures.html)
 

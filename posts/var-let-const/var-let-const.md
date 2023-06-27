@@ -1,8 +1,8 @@
 ---
-title: "var, let, const"
-author: "김현민 @rudy3091"
-date: "2021-09-14"
-slug: "posts/var-let-const"
+title: 'var, let, const'
+author: '김현민 @rudy3091'
+date: '2021-09-14'
+slug: 'var-let-const'
 ---
 
 ## 들어가기 전에
@@ -21,11 +21,11 @@ var은 ES2015 이전에 사용되던 변수 선언 키워드이다. [ES5 스펙]
 
 ![Untitled](Untitled1.png)
 
-이것도 잘은 모르겠지만 let과 const 키워드는 확실히 알아볼 수 있다. var 키워드로 변수를 선언하는 것은 *VariableStatement*, let/const 키워드로 변수를 선언하는것은 *LexicalDeclaration*이라 부르는 것 같다. 중요한 것은 다음 문구이다.
+이것도 잘은 모르겠지만 let과 const 키워드는 확실히 알아볼 수 있다. var 키워드로 변수를 선언하는 것은 _VariableStatement_, let/const 키워드로 변수를 선언하는것은 *LexicalDeclaration*이라 부르는 것 같다. 중요한 것은 다음 문구이다.
 
 ![Untitled](Untitled2.png)
 
-> let 과 const 변수선언은 실행중인 실행 컨텍스트의 렉시컬 환경 스코프를 가지는 변수들을 정의한다. 변수들은 그들을 포함하는 렉시컬 환경이 인스턴스화 되었을 때 생성되지만, 변수의 렉시컬 바인딩이 평가되기 전까지는 어떠한 방법으로도 접근할 수 없다. Initializer와 렉시컬 바인딩에 의해 정의된 변수는 변수가 생성될 때가 아니라,  렉시컬 바인딩이 평가될 때에 Initializer의 AssignmentExpression 값이 할당 된다. 만약 let 변수 선언의 렉시컬 바인딩이 Initializer를 가지지 않는다면 렉시컬 바인딩이 평가될 때 undefined 값이 할당되게 된다.
+> let 과 const 변수선언은 실행중인 실행 컨텍스트의 렉시컬 환경 스코프를 가지는 변수들을 정의한다. 변수들은 그들을 포함하는 렉시컬 환경이 인스턴스화 되었을 때 생성되지만, 변수의 렉시컬 바인딩이 평가되기 전까지는 어떠한 방법으로도 접근할 수 없다. Initializer와 렉시컬 바인딩에 의해 정의된 변수는 변수가 생성될 때가 아니라, 렉시컬 바인딩이 평가될 때에 Initializer의 AssignmentExpression 값이 할당 된다. 만약 let 변수 선언의 렉시컬 바인딩이 Initializer를 가지지 않는다면 렉시컬 바인딩이 평가될 때 undefined 값이 할당되게 된다.
 
 모르는 말들이 막 나온다. 하나씩 살펴보자.
 
@@ -110,7 +110,7 @@ console.log(x); // Uncaught ReferenceError: x is not defined
 console.log(x); // Uncaught ReferenceError: x is not defined
 
 function f() {
-	var x = 'hello world!';
+  var x = 'hello world!';
 }
 f();
 ```
@@ -123,7 +123,7 @@ f();
 var x = 'global';
 
 function f() {
-	var x = y = 'local';
+  var x = (y = 'local');
 }
 f();
 
@@ -135,7 +135,7 @@ console.log(window.y); // local
 자바스크립트에서 `y = 'local'`과 같은 대입문은 statement가 아닌 expression이다. 스펙에서 해당 내용을 찾진 못했지만 브라우저의 자바스크립트 콘솔에서 `y = 'local'`을 실행시켜보면 아마 `'local'`이 출력될 것이다. 따라서 `var x = y = 'local'`과 같은 문법이 사용가능한데, 여기서 tricky한 점이 하나 있다. 분명 y를 함수 내부에서 선언했는데, 함수 외부 스코프에서 y 변수의 값을 출력해보면 함수 내부에서 할당한 값이 출력된다.
 
 ```jsx
-var x = y = 'local';
+var x = (y = 'local');
 
 // 위 코드는 사실 아래와 동일하다
 var x = y;
@@ -146,9 +146,10 @@ y = 'local';
 
 ```jsx
 function f() {
-	var x, y = x = 'local';
-	console.log(x); // local
-	console.log(y); // local
+  var x,
+    y = (x = 'local');
+  console.log(x); // local
+  console.log(y); // local
 }
 f();
 
@@ -161,7 +162,7 @@ console.log(y); // Uncaught ReferenceError: y is not defined
 ```jsx
 var sum = 0;
 for (var i = 1; i < 11; i++) {
-	sum += i;
+  sum += i;
 }
 console.log(sum); // 55
 console.log(i); // 11
@@ -201,8 +202,8 @@ TDZ의 개념을 생각해 보면 변수가 선언된 라인보다 위쪽에서 
 const x = 'hello world!';
 
 function f() {
-	console.log(x); // Uncaught ReferenceError: Cannot access 'x' before initialization
-	const x = 'hello!';
+  console.log(x); // Uncaught ReferenceError: Cannot access 'x' before initialization
+  const x = 'hello!';
 }
 f();
 ```
@@ -215,7 +216,7 @@ f();
 
 라는 말이 사실임을 확인할 수 있다. f 함수가 실행될 때 f 함수 내부의 로컬변수 x는 생성되었지만, 그 변수에 'hello!'라는 값을 넣어주는 코드가 평가되기 전에 접근하려고 하면 위와 같이 ReferenceError가 발생하는 것이다. 이는 let의 경우에도 동일하게 동작한다.
 
-또한 let과 const 키워드로 선언된 변수는 var 키워드로 선언된 변수와 다른 스코프를 가진다. 이 부분 역시 `스코프`를 다룰 때 알아보겠지만, 간단히 말하자면 var 키워드로 선언된 변수는 실행 컨텍스트의 *VariableEnvironment* 로 들어가고, let과 const 키워드로 선언된 변수는 실행 컨텍스트의 *LexicalEnvironMent* 로 들어가기 때문이다. 이는 스펙 명세에도 나와 있다.
+또한 let과 const 키워드로 선언된 변수는 var 키워드로 선언된 변수와 다른 스코프를 가진다. 이 부분 역시 `스코프`를 다룰 때 알아보겠지만, 간단히 말하자면 var 키워드로 선언된 변수는 실행 컨텍스트의 _VariableEnvironment_ 로 들어가고, let과 const 키워드로 선언된 변수는 실행 컨텍스트의 _LexicalEnvironMent_ 로 들어가기 때문이다. 이는 스펙 명세에도 나와 있다.
 
 ES5 스펙: 선언된 변수와 함수가 *VariableEnvironment*의 *Environment Record*에 추가된다고 써있다.
 

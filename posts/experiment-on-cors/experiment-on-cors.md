@@ -1,10 +1,9 @@
 ---
-title: "CORS 실전편"
-author: "김현민 @rudy3091"
-date: "2021-12-26"
-slug: "posts/experiment-on-cors"
+title: 'CORS 실전편'
+author: '김현민 @rudy3091'
+date: '2021-12-26'
+slug: 'experiment-on-cors'
 ---
-
 
 ## 개요
 
@@ -82,7 +81,7 @@ CORS는 잘 알다시피 한 애플리케이션이 다른 출처의 리소스에
 
 - User Agent 가 자동으로 설정한 헤더를 가지는 요청
 
-    - `Accept`, `Accept-Language`, `Content-Language`, `Content-Type`이 해당
+  - `Accept`, `Accept-Language`, `Content-Language`, `Content-Type`이 해당
 
 - Content-Type 헤더를 사용할 경우엔 해당 내용이 `application/x-www-form-urlencoded`, `multipart/form-data`, `text/plain`중 하나인 요청
 
@@ -249,7 +248,7 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 
 Cross Origin 요청이 이루어진 경우, 자바스크립트는 안전하다고 분류된 헤더에만 접근할 수 있습니다
 
-mdn의 문서에 따르면 
+mdn의 문서에 따르면
 
 - Cache-Control
 
@@ -273,7 +272,7 @@ mdn의 문서에 따르면
 
 서버에 안전하지 않은 응답 헤더를 하나 포함해보겠습니다
 
-``` go
+```go
 func helloHandler(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Access-Control-Allow-Origin", "http://localhost:5001")
 	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
@@ -286,20 +285,19 @@ func helloHandler(w http.ResponseWriter, req *http.Request) {
 
 요청을 보내고, Response 객체의 headers.get() 메소드를 이용해 헤더값을 읽어보면 에러가 아무것도 보이지 않습니다
 
-``` javascript
-fetch("http://localhost:8080", {
+```javascript
+fetch('http://localhost:8080', {
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
-  method: "PATCH",
-  credentials: "include",
-})
-  .then((res) => console.log(res.headers.get("My-Custom-Header"))); // null
+  method: 'PATCH',
+  credentials: 'include',
+}).then((res) => console.log(res.headers.get('My-Custom-Header'))); // null
 ```
 
 이를 해결할 수 있는 방법은 서버에 `Access-Control-Expose-Headers` 헤더를 추가하는 것입니다
 
-``` go
+```go
 func helloHandler(w http.ResponseWriter, req *http.Request) {
 	w.Header().Add("Access-Control-Allow-Origin", "http://localhost:5001")
 	w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
@@ -408,7 +406,7 @@ setInterval(() => {
   })
     .then((res) => res.text())
     .then((data) => console.log(data));
-}, 1000); 
+}, 1000);
 ```
 
 처음에는 서버에 Max Age 를 주지 않고 사전 요청이 어떻게 전송되는지 확인해보겠습니다

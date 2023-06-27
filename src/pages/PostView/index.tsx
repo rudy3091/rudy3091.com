@@ -1,12 +1,12 @@
-import * as React from "react";
-import Layout from "../../components/Layout";
-import PostHead from "../../components/PostHead";
-import styled from "styled-components";
-import { graphql, Link, PageProps } from "gatsby";
+import * as React from 'react';
+import Layout from '../../components/Layout';
+import PostHead from '../../components/PostHead';
+import styled from 'styled-components';
+import { graphql, Link, PageProps } from 'gatsby';
 
 const PVContainer = styled.div`
   padding: 1rem;
-  color: #224;
+  color: ${({ theme }) => theme.black};
 
   & a {
     color: #889;
@@ -72,7 +72,8 @@ const PVContainer = styled.div`
     }
   }
 
-  & em, & strong {
+  & em,
+  & strong {
     color: #45a;
   }
 
@@ -95,10 +96,7 @@ const PostViewPage = (props: PageProps) => {
     <Layout>
       <PVContainer>
         <div className="blog-post">
-          <PostHead
-            title={frontmatter.title}
-            date={frontmatter.date ?? ""}
-          ></PostHead>
+          <PostHead title={frontmatter.title} date={frontmatter.date ?? ''} />
           <div
             className="blog-post-content"
             dangerouslySetInnerHTML={{ __html: html }}

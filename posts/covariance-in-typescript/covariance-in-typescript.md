@@ -1,8 +1,8 @@
 ---
-title: "타입과 자바스크립트"
-author: "김현민 @rudy3091"
-date: "2021-11-06"
-slug: "posts/types-and-javascript"
+title: '타입과 자바스크립트'
+author: '김현민 @rudy3091'
+date: '2021-11-06'
+slug: 'types-and-javascript'
 ---
 
 프로그래밍 언어에서 일반적으로 `타입`은 데이터가 메모리에 어떻게 저장될지를 결정하는 `자료형`을 의미합니다. 타입이라는 개념은 단순히 자료형을 의미하는 개념일 뿐만 아니라 컴퓨터 과학에서 `타입 이론`으로 연구되는 분야의 핵심이기도 합니다. 이번 포스트에서는 이 타입 시스템에 대해서 이야기를 해보려 합니다.
@@ -23,7 +23,7 @@ slug: "posts/types-and-javascript"
 
 `flow`는 2014년에 페이스북이 발표한 정적 타입 체커입니다. 소스코드 파일의 가장 첫 줄에 주석으로 `@flow`를 추가하면 flow가 그 코드의 타입을 체크하고, 올바르지 않은 코드라면 에러를 발생시키는 구조입니다. 우리는 flow 덕분에 아래와 같은 코드를 사용할 수 있습니다.
 
-``` javascript
+```javascript
 // @flow
 class Foo { ... }
 
@@ -32,7 +32,7 @@ const foo: Foo = new Foo(...);
 
 위처럼 클래스 역시 하나의 타입으로 보고 변수의 타입으로 선언할 수도 있습니다. 이는 c++이나 java에서의 타입 지정과 비슷합니다.
 
-``` javascript
+```javascript
 // @flow
 class Parent { ... }
 class Child extends Parent { ... }
@@ -41,7 +41,7 @@ const foo: Parent = new Child();
 const foo: Child = new Child();
 ```
 
-``` javascript
+```javascript
 // @flow
 type NumsOrStrings = Array<number | string>;
 
@@ -60,17 +60,29 @@ type variance는 **어떤 타입을 대체해서 사용할 수 있는 타입을 
 - `Contravariance`는 그 타입의 supertype을 허용하고, subtype을 허용하지 않습니다.
 - 마지막으로 `Bivariance`는 그 타입의 supertype과 subtype 모두를 허용합니다.
 
-위의 Parent, Child 예제에서, Child는 Parent를 상속받습니다. 따라서 _Parent 타입은 less specific 하고 Child 타입은 more specific 하다_ 고 할 수 있습니다. more specific 한 타입이 더 작은 개념이므로 Child 는 Parent 타입의 subtype이 되고, Parent 는 Child 타입의 supertype 이 됩니다. flow의 [공식 문서](https://flow.org/en/docs/lang/variance/)에 따르면, flow는 함수의 입력에 해당하는 파라미터는 `Contravariant`하게 동작하고, 함수의 출력에 해당하는 리턴타입은 `Covariant`하게 동작한다고 합니다. 
+위의 Parent, Child 예제에서, Child는 Parent를 상속받습니다. 따라서 _Parent 타입은 less specific 하고 Child 타입은 more specific 하다_ 고 할 수 있습니다. more specific 한 타입이 더 작은 개념이므로 Child 는 Parent 타입의 subtype이 되고, Parent 는 Child 타입의 supertype 이 됩니다. flow의 [공식 문서](https://flow.org/en/docs/lang/variance/)에 따르면, flow는 함수의 입력에 해당하는 파라미터는 `Contravariant`하게 동작하고, 함수의 출력에 해당하는 리턴타입은 `Covariant`하게 동작한다고 합니다.
 
-``` javascript
+```javascript
 //@flow
-class Parent { /* ... */ }
-class Child extends Parent { /* ... */ }
+class Parent {
+  /* ... */
+}
+class Child extends Parent {
+  /* ... */
+}
 
-function f1(x: Parent): Parent { /* ... */ }
-function f2(x: Parent): Child { /* ... */ }
-function f3(x: Child): Parent { /* ... */ }
-function f4(x: Child): Child { /* ... */ }
+function f1(x: Parent): Parent {
+  /* ... */
+}
+function f2(x: Parent): Child {
+  /* ... */
+}
+function f3(x: Child): Parent {
+  /* ... */
+}
+function f4(x: Child): Child {
+  /* ... */
+}
 
 const p: Parent = new Parent();
 const c: Child = new Child();
@@ -86,7 +98,7 @@ const res7: Child = f3(c); // ERROR
 const res8: Child = f4(c); // ok
 ```
 
-예제와 같이 함수의 입력은 Contravariant 하게 동작하므로, Child 자리에는 Child 타입의 supertype인 Parent가 허용됩니다. 따라서 f1, 2, 3, 4 모두 Parent 를 넣던, Child 를 넣던 정상적으로 동작합니다.  하지만 함수의 출력은 Covariant 하게 동작하므로, Child 타입을 반환하는 함수의 결과를 Parent 타입 변수에 할당하려 하면 에러가 발생합니다.
+예제와 같이 함수의 입력은 Contravariant 하게 동작하므로, Child 자리에는 Child 타입의 supertype인 Parent가 허용됩니다. 따라서 f1, 2, 3, 4 모두 Parent 를 넣던, Child 를 넣던 정상적으로 동작합니다. 하지만 함수의 출력은 Covariant 하게 동작하므로, Child 타입을 반환하는 함수의 결과를 Parent 타입 변수에 할당하려 하면 에러가 발생합니다.
 
 사실 이것은 생각해보면 당연합니다. Child가 가지는 데이터는 Parent 에는 없을 수 있고, Parent 가 가지는 데이터는 Child가 모두 가지고 있기 때문에 함수 내부에서 Child 타입은 Parent 타입이 할 수 있는 모든것을 커버할 수 있기 때문에 supertype이 허용되고(Contravariance), 함수가 반환하는 값이 Parent 라면 Child 타입 변수가 기대하는 모든 것을 처리할 수 없기 때문에 more specific 한 타입인 subtype이 허용됩니다(Covariance).
 
@@ -96,19 +108,31 @@ const res8: Child = f4(c); // ok
 
 [타입스크립트 playground](typescriptlang.org/play)에서 flow 에서 언급한 Parent-Child 예제를 입력해보면 아무 곳도 에러가 나지 않습니다. subtype 에 해당하는 Child 클래스에 Parent 가 가지지 않는 필드를 넣어줘야 그제서야 에러를 내뿜습니다.
 
-``` typescript
-class Parent { /* ... */ }
-class Child extends Parent { /* ... */ }
+```typescript
+class Parent {
+  /* ... */
+}
+class Child extends Parent {
+  /* ... */
+}
 
-function f(): Parent { /* ... */ }
+function f(): Parent {
+  /* ... */
+}
 const res: Child = f(); // ok
 ```
 
-``` typescript
-class Parent { /* ... */ }
-class Child extends Parent { x = 10; /* ... */ }
+```typescript
+class Parent {
+  /* ... */
+}
+class Child extends Parent {
+  x = 10; /* ... */
+}
 
-function f(): Parent { /* ... */ }
+function f(): Parent {
+  /* ... */
+}
 const res: Child = f(); // ERROR
 ```
 
@@ -118,18 +142,34 @@ const res: Child = f(); // ERROR
 
 `Nominal typing`은 타입의 이름이 다르다면 아예 다른 타입으로 취급합니다. 이를 따르는 언어는 C++, Java 등이 있습니다. 반면 `Structural typing`은 타입의 이름이 다르더라도, 그 구조가 같다면 같은 타입으로 취급합니다. 이를 따르는 언어는 Ocaml, Haskell 등의 언어가 있습니다.
 
-``` typescript
+```typescript
 // nominal typing
-class Foo { f(x: string) { /* ... */ } }
-class Bar { f(x: string) { /* ... */ } }
+class Foo {
+  f(x: string) {
+    /* ... */
+  }
+}
+class Bar {
+  f(x: string) {
+    /* ... */
+  }
+}
 
 const foo: Foo = new Bar(); // Error: Foo에 Bar 타입을 할당하려고 하므로 nominal type에서는 에러 발생
 ```
 
-``` typescript
+```typescript
 // structural typing
-class Foo { f(x: string) { /* ... */ } }
-class Bar { f(x: string) { /* ... */ } }
+class Foo {
+  f(x: string) {
+    /* ... */
+  }
+}
+class Bar {
+  f(x: string) {
+    /* ... */
+  }
+}
 
 const foo: Foo = new Bar(); // OK: 서로 다른 타입이라도 structural type에서는 구조가 같으므로 에러 발생X
 ```
@@ -140,29 +180,29 @@ const foo: Foo = new Bar(); // OK: 서로 다른 타입이라도 structural type
 
 지금까지 flow와 타입스크립트에서 함수의 파라미터와 리턴타입이 각각 Contravariant, Covariant 하게 동작하는 것을 확인했습니다. 그렇다면 Bivariance 는 무엇이고, 왜 존재하는 걸까요?
 
-``` typescript
+```typescript
 type Event = MouseEvent | KeyboardEvent;
 type Handler<T> = (e: T) => void;
 
 // OK
 let handler: Handler<Event> = (e: Event) => {
-  console.log("event", e);
-}
+  console.log('event', e);
+};
 
 // OK
 handler = (e: MouseEvent | KeyboardEvent | TouchEvent) => {
-  console.log("event", e);
-}
+  console.log('event', e);
+};
 
 // ERROR
 handler = (e: MouseEvent) => {
-  console.log("event", e);
-}
+  console.log('event', e);
+};
 ```
 
 마지막줄의 handler에 MouseEvent만을 파라미터로 받는 함수를 할당하는 코드는 에러를 발생시킵니다. 원래 handler는 MosueEvent와 KeyboardEvent를 커버할 수 있는 함수인데, 여기에 MouseEvent만을 커버할 수 있는 함수를 할당해버리면 안되기 때문입니다. 하지만 타입스크립트에서는 이것을 허용하도록 할 수 있습니다. 이는 곧 함수의 파라미터를 Bivariant 하게 동작하도록 할 수 있다는 말과 동일합니다. 타입스크립트 컴파일러의 플래그 중 `strictFunctionTypes`를 끄면 가능합니다. 일반적인 경우에 less specific 한 타입을 받는 Covariance 가 좀 더 `type-safe`하지만, 컴파일러 옵션에 strictFunctionTypes 플래그가 생기기 이전까지 타입스크립트에 Bivariance를 허용해야 하는 이유가 있었습니다. **아래 코드와 설명은 [레퍼런스](https://seob.dev/posts/%EA%B3%B5%EB%B3%80%EC%84%B1%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/)를 참고했습니다**.
 
-``` typescript
+```typescript
 interface Array<T> {
   ...
   push(...item: T[]): number;
@@ -174,7 +214,7 @@ Array 타입에는 push 메소드가 존재합니다. `Array<string>` 타입의 
 
 하지만 직관적으로 봤을 때는 `Array<number | string>`이 `Array<string>`을 포함하는 것 같습니다. 이러한 문제를 해결하기 위해 Scala 와 같은 언어에서는 아래와 같이 제네릭에서 Convariance/Contravariance를 명시해주는 문법이 있다고 합니다. 하지만 타입스크립트에서는 이러한 문법이 없어 `type-safety`를 조금 희생하고, 위의 Array와 같은 케이스를 위해 Bivariance를 선택한 것으로 보입니다.
 
-``` scala
+```scala
 case class Foo[+T] // T는 covariant
 case class Foo[-T] // T는 contravriant
 ```
@@ -185,28 +225,32 @@ case class Foo[-T] // T는 contravriant
 
 다음과 같은 인터페이스를 생각해보겠습니다.
 
-``` typescript
+```typescript
 interface Store<T> {
   set: (item: T) => void;
 }
 
 const store: Store<number | string> = {
   // ERROR
-  set(item: number) { /* ... */ }
-}
+  set(item: number) {
+    /* ... */
+  },
+};
 ```
 
 함수의 파라미터는 Contravariant 하게 동작하기 때문에 `number | string` 타입의 subtype 인 `number` 를 사용하면 에러가 발생하게 됩니다. 하지만 여기서 set 메소드의 타입을 조금만 바꿔주면 에러를 없앨 수 있습니다.
 
-``` typescript
+```typescript
 interface Store<T> {
   set(item: T): void;
 }
 
 const store: Store<number | string> = {
   // OK
-  set(item: number) { /* ... */ }
-}
+  set(item: number) {
+    /* ... */
+  },
+};
 ```
 
 놀랍게도 `set: (item: T) => void` 에서 `set(item: T): void`로만 바꿔줬는데, 에러가 발생하지 않습니다. 아까 `Array<T>`와 같이 직관적으로 봤을 때 Covariant하게 동작해야 할 것 같은 것들이 있었습니다. 이러한 녀석들은 Covariant 하게 동작했으면 좋겠으나, 함수의 파라미터는 Contravariant 하게 동작해야 하므로 이를 지원하기 위해 의도적으로 추가한 문법이 바로 이것이라고 합니다.
@@ -215,12 +259,11 @@ const store: Store<number | string> = {
 
 실제로 깃허브의 타입스크립트 저장소에 선언된 타입선언 파일들에도 메소드들이 `set(item: T): void` 와 같은 형식으로 저장되어 있어, Bivariant 하게 동작합니다.
 
-
 ![lib.es2015.d.ts](./lib-es2015-d-ts.png)
 
 사실 flow에는 scala와 비슷하게 covariance/contravariance를 지정해주는 문법이 따로 있습니다. 왜 타입스크립트에는 이런 문법을 도입하지 않았는지 의문이네요.
 
-``` typescript
+```typescript
 // @flow
 type GenericBox<T> = T;
 
@@ -231,7 +274,7 @@ let x: GenericBox<number> = 1;
 
 ```
 
-``` typescript
+```typescript
 // @flow
 type GenericBox<+T> = T; // covariance sigil
 
@@ -240,7 +283,7 @@ let x: GenericBox<number> = 1;
 (x: GenericBox<number | string>); // covariance, subtype을 허용
 ```
 
-``` typescript
+```typescript
 // @flow
 type GenericBox<-T> = T => void; // contravariance sigil, contravariant한 상황에만 사용가능하기 때문에 함수의 파라미터로 사용
 
@@ -257,11 +300,11 @@ let x: GenericBox<number | string> =
 
 ## 레퍼런스
 
-wikipedia - programming language: [https://en.wikipedia.org/wiki/Programming\_language#Type\_system](https://en.wikipedia.org/wiki/Programming_language#Type_system)  
+wikipedia - programming language: [https://en.wikipedia.org/wiki/Programming_language#Type_system](https://en.wikipedia.org/wiki/Programming_language#Type_system)  
 list of languages that compile to js: [https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS](https://github.com/jashkenas/coffeescript/wiki/List-of-languages-that-compile-to-JS)  
 flow docs - type variance: [https://flow.org/en/docs/lang/variance/](https://flow.org/en/docs/lang/variance/)  
 type variance - why it matters: [http://www.dreadedsoftware.com/blog/2016/6/4/type-variance-why-it-matters](http://www.dreadedsoftware.com/blog/2016/6/4/type-variance-why-it-matters)  
 wikipedia - subtyping: [https://en.wikipedia.org/wiki/Subtyping](https://en.wikipedia.org/wiki/Subtyping)  
 typescript docs - TypeScript 2.6: [https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-2-6.html)  
 공변성이란 무엇인가: [https://seob.dev/posts/%EA%B3%B5%EB%B3%80%EC%84%B1%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/](https://seob.dev/posts/%EA%B3%B5%EB%B3%80%EC%84%B1%EC%9D%B4%EB%9E%80-%EB%AC%B4%EC%97%87%EC%9D%B8%EA%B0%80/)  
-TS docs - Type Compatibility: [https://www.typescriptlang.org/ko/docs/handbook/type-compatibility.html](https://www.typescriptlang.org/ko/docs/handbook/type-compatibility.html)  
+TS docs - Type Compatibility: [https://www.typescriptlang.org/ko/docs/handbook/type-compatibility.html](https://www.typescriptlang.org/ko/docs/handbook/type-compatibility.html)

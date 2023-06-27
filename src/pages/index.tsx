@@ -1,14 +1,19 @@
-import * as React from "react";
-import Layout from "../components/Layout";
-import { Link } from "gatsby";
+import * as React from 'react';
+import Layout from '../components/Layout';
+import Landing from '../components/Landing';
+import styled from 'styled-components';
+
+const Container = styled.div`
+  width: 100%;
+  color: ${({ theme }) => theme.black};
+`;
 
 const IndexPage = () => {
   return (
     <Layout>
-      <div className="index-container" style={{ width: `100%` }}>
-        <div style={{ fontSize: `2rem` }}>🙂</div>
-        <Link to="/posts">posts (link)</Link>
-      </div>
+      <Container>
+        <Landing />
+      </Container>
     </Layout>
   );
 };

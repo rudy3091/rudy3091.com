@@ -1,8 +1,8 @@
 ---
-title: "컴퓨터는 어떻게 코드를 실행할까"
-author: "김현민 @rudy3091"
-date: "2022-02-06"
-slug: "posts/x86-assembly"
+title: '컴퓨터는 어떻게 코드를 실행할까'
+author: '김현민 @rudy3091'
+date: '2022-02-06'
+slug: 'x86-assembly'
 ---
 
 ## 개요
@@ -22,8 +22,8 @@ slug: "posts/x86-assembly"
 그 중 한 장면이 제 마음을 불편하게 했습니다
 
 > A: 나 어셈블리어 할줄몰라  
-B: 컴퓨터구조 시간에 배웠던걸 기억해내봐  
-A: 몰라 난 부트캠프 출신이라고  
+> B: 컴퓨터구조 시간에 배웠던걸 기억해내봐  
+> A: 몰라 난 부트캠프 출신이라고
 
 안타깝게도 저는 부트캠프 출신이고, 컴퓨터구조 강의도 수강했지만 어셈블리어를 할 줄 몰랐습니다
 
@@ -109,19 +109,19 @@ opcode rs    rt    rd    shamt funct
 어셈블리어로 프로그램을 작성해보기 전, c언어로 쓴 코드가 기계어로 만들어지기까지의 과정을 알아보겠습니다
 
 - 전처리
-    - c언어 컴파일러의 전처리기는 `#define`, `#include` 같은 구문들에 대해 대치작업을 실시합니다
-    - 단순 텍스트 대치 작업이 이 단계에서 이뤄집니다
+  - c언어 컴파일러의 전처리기는 `#define`, `#include` 같은 구문들에 대해 대치작업을 실시합니다
+  - 단순 텍스트 대치 작업이 이 단계에서 이뤄집니다
 - 컴파일
-    - 전처리가 끝나고 우리가 작성한 고급 코드를 저급 코드로 바꿔주는 작업인 컴파일 과정이 진행됩니다
-    - 이 과정에서 만들어지는 부산물은 `.s` 의 확장자를 가지는 어셈블리어 파일입니다
+  - 전처리가 끝나고 우리가 작성한 고급 코드를 저급 코드로 바꿔주는 작업인 컴파일 과정이 진행됩니다
+  - 이 과정에서 만들어지는 부산물은 `.s` 의 확장자를 가지는 어셈블리어 파일입니다
 - 어셈블
-    - 어셈블리어를 기계어로 변환시키는 과정입니다
-    - 아까 언급했듯 이 과정에서 플랫폼 종속적인 기계어 코드를 만들어냅니다
-    - 이 과정에서 만들어지는 부산물은 `.o` 의 확장자를 가지는 오브젝트 파일입니다
-    - 이 오브젝트 파일은 컴퓨터가 이해할 수 있는 바이너리 포맷입니다 (0과 1로 이루어짐)
+  - 어셈블리어를 기계어로 변환시키는 과정입니다
+  - 아까 언급했듯 이 과정에서 플랫폼 종속적인 기계어 코드를 만들어냅니다
+  - 이 과정에서 만들어지는 부산물은 `.o` 의 확장자를 가지는 오브젝트 파일입니다
+  - 이 오브젝트 파일은 컴퓨터가 이해할 수 있는 바이너리 포맷입니다 (0과 1로 이루어짐)
 - 링크
-    - 최종적으로 오브젝트 파일들을 하나로 이어주는 작업입니다
-    - 하나의 실행 파일로 만들어 executable을 만들어냅니다
+  - 최종적으로 오브젝트 파일들을 하나로 이어주는 작업입니다
+  - 하나의 실행 파일로 만들어 executable을 만들어냅니다
 
 어셈블리어로 코드를 쓴다면 위 과정에서 전처리와 컴파일 과정을 건너뛰게 됩니다
 
@@ -756,7 +756,7 @@ NASM docs - chap4 (preprocessor): [https://www.nasm.us/xdoc/2.15.05/html/nasmdoc
 
 wikipedia - Mach-O: [https://en.wikipedia.org/wiki/Mach-O](https://en.wikipedia.org/wiki/Mach-O)
 
-wikipedai - system call: [https://ko.wikipedia.org/wiki/시스템_호출](https://ko.wikipedia.org/wiki/%EC%8B%9C%EC%8A%A4%ED%85%9C_%ED%98%B8%EC%B6%9C)
+wikipedai - system call: [https://ko.wikipedia.org/wiki/시스템\_호출](https://ko.wikipedia.org/wiki/%EC%8B%9C%EC%8A%A4%ED%85%9C_%ED%98%B8%EC%B6%9C)
 
 linux system call table for x86_64: [https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/](https://blog.rchapman.org/posts/Linux_System_Call_Table_for_x86_64/)
 
@@ -774,7 +774,7 @@ learning nasm on macos: [http://sevanspowell.net/posts/learning-nasm-on-macos.ht
 
 x86 flags register: [http://judis.me/wordpress/x86-flags-register/](http://judis.me/wordpress/x86-flags-register/)
 
-x86 어셈블리 / x86 아키텍처: [https://ko.wikibooks.org/wiki/X86_어셈블리/x86_아키텍처](https://ko.wikibooks.org/wiki/X86_%EC%96%B4%EC%85%88%EB%B8%94%EB%A6%AC/x86_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98)
+x86 어셈블리 / x86 아키텍처: [https://ko.wikibooks.org/wiki/X86*어셈블리/x86*아키텍처](https://ko.wikibooks.org/wiki/X86_%EC%96%B4%EC%85%88%EB%B8%94%EB%A6%AC/x86_%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98)
 
 Stack overflow - Whats the purpose of the lea instruction - [https://stackoverflow.com/questions/1658294/whats-the-purpose-of-the-lea-instruction](https://stackoverflow.com/questions/1658294/whats-the-purpose-of-the-lea-instruction)
 

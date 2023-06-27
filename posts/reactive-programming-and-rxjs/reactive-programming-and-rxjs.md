@@ -1,8 +1,8 @@
 ---
-title: "리액티브 프로그래밍과 RxJS"
-author: "김현민 @rudy3091"
-date: "2021-10-31"
-slug: "posts/reactive-programming-and-rxjs"
+title: '리액티브 프로그래밍과 RxJS'
+author: '김현민 @rudy3091'
+date: '2021-10-31'
+slug: 'reactive-programming-and-rxjs'
 ---
 
 자바스크립트는 객체지향 프로그래밍, 명령형 프로그래밍, 함수형 프로그래밍 등의 패러다임을 지원하는 멀티 패러다임 언어입니다. 이번 포스트에서는 이와같은 프로그래밍 패러다임 중, `반응형 프로그래밍(Reactive Programming)`에 대해 알아본 결과를 공유합니다.
@@ -60,42 +60,51 @@ Subject의 종류와 동작에 관한 자세한 설명은 [레퍼런스](http://
 
 RxJS 는 **Observable**과 Observable을 조작하는 **Operator**, 그를 subscribe 하는 **Observer** 함수들의 조합을 생각하면 됩니다. Observable은 직접 Observable 클래스의 생성자를 호출해 생성할 수도 있고, RxJS 가 제공하는 여러 api를 이용해 생성할 수도 있습니다.
 
-``` javascript
-const random4 = new Rx.Observable((subscriber) => { // subscriber는 이 Observable을 구독할 옵저버 함수에 해당하는 객체
+```javascript
+const random4 = new Rx.Observable((subscriber) => {
+  // subscriber는 이 Observable을 구독할 옵저버 함수에 해당하는 객체
   subscriber.next(Math.floor(Math.random * 10)); // next 는 데이터 스트림에 들어가는 데이터
   subscriber.next(Math.floor(Math.random * 10));
   subscriber.next(Math.floor(Math.random * 10));
   subscriber.next(Math.floor(Math.random * 10));
   subscriber.complete(); // complete가 호출되면 데이터 스트림의 끝임을 알림
-})
+});
 const oneToTen = Rx.range(1, 10); // range 함수를 사용해 1에서 10까지의 정수 스트림 생성
-const clickStream = Rx.fromEvent(document, "click"); // document를 클릭할 시 데이터를 발생시키는 이벤트 스트림
+const clickStream = Rx.fromEvent(document, 'click'); // document를 클릭할 시 데이터를 발생시키는 이벤트 스트림
 ```
 
 위 코드와 같이 다양한 방법으로 Observable을 생성할 수 있습니다. 이렇게 생성된 Observable은 옵저버 함수가 subscribe 하기 전까지 Operator로 수정해줄 수 있습니다.
 
-``` javascript
+```javascript
 const doubledRandom4 = random4.pipe(
   map((x) => x + 1),
   map((x) => x * 2),
-) // pipe 함수로 여러 operator를 조합
-const mergedRange = oneToTen.merge(random4) // merge 함수로 다른 Observable과 조합할 수도 있음
+); // pipe 함수로 여러 operator를 조합
+const mergedRange = oneToTen.merge(random4); // merge 함수로 다른 Observable과 조합할 수도 있음
 ```
 
 pipe, merge 등의 함수를 이용해 Observable을 조작할 수 있습니다. 이러한 함수들의 목록과 역할은 [레퍼런스](https://rxjs-dev.firebaseapp.com/api)에서 확인할 수 있습니다. 이제 필요한 만큼 Observable을 조작하기도 했으니 subscribe하여 스트림 내부의 데이터를 꺼내 사용하겠습니다.
 
-``` javascript
-random4.subscribe((x) => { console.log(x) }); // 난수 4개 출력
-doubledRandom4.subscribe((x) => { console.log(x) }); // (난수 4개 + 1 * 2) 출력, 기존 난수 범위 10보다 큰 값이 출력되기도 함
-oneToTen.subscribe({ // subscribe 함수에 객체를 전달하면 스트림 에러 및 완료시 동작을 정의가능
-  next(x) { // 데이터 발생시 실행
-    console.log("data", x);
+```javascript
+random4.subscribe((x) => {
+  console.log(x);
+}); // 난수 4개 출력
+doubledRandom4.subscribe((x) => {
+  console.log(x);
+}); // (난수 4개 + 1 * 2) 출력, 기존 난수 범위 10보다 큰 값이 출력되기도 함
+oneToTen.subscribe({
+  // subscribe 함수에 객체를 전달하면 스트림 에러 및 완료시 동작을 정의가능
+  next(x) {
+    // 데이터 발생시 실행
+    console.log('data', x);
   },
-  error() { // 에러 발생시 실행
-    console.error("error on stream");
+  error() {
+    // 에러 발생시 실행
+    console.error('error on stream');
   },
-  complete() { // 스트림 완료시 실행
-    console.log("stream finished");
+  complete() {
+    // 스트림 완료시 실행
+    console.log('stream finished');
   },
 });
 ```
@@ -114,23 +123,23 @@ _반응형으로 생각하기_ 에 익숙하지 않다면 이러한 사용법이
 
 ![debouncetime](./debouncetime.png)
 
-``` javascript
-const closed = document.getElementById("closed");
-const opened = document.getElementById("opened");
+```javascript
+const closed = document.getElementById('closed');
+const opened = document.getElementById('opened');
 
 const ops = rxjs.operators;
-const clickStream = rxjs.fromEvent(window.app, "click");
+const clickStream = rxjs.fromEvent(window.app, 'click');
 
 const debouncedStream = clickStream.pipe(ops.debounceTime(250));
 const doubleClickStream = clickStream.pipe(
   ops.buffer(debouncedStream),
   ops.map((buf) => buf.length),
-  ops.filter((len) => len >= 2)
+  ops.filter((len) => len >= 2),
 );
 
 doubleClickStream.subscribe(() => {
-  opened.classList.toggle("hidden");
-  closed.classList.toggle("hidden");
+  opened.classList.toggle('hidden');
+  closed.classList.toggle('hidden');
 });
 ```
 
@@ -166,16 +175,16 @@ doubleClickStream: -----------e-----------------e----|->
 </iframe>
 </center>
 
-``` javascript
-const closed1 = document.getElementById("closed");
-const opened1 = document.getElementById("opened");
-const closed2 = document.getElementById("closed2");
-const opened2 = document.getElementById("opened2");
+```javascript
+const closed1 = document.getElementById('closed');
+const opened1 = document.getElementById('opened');
+const closed2 = document.getElementById('closed2');
+const opened2 = document.getElementById('opened2');
 
 const ops = rxjs.operators;
-const apps = document.querySelectorAll(".app");
-const clickStream1000 = rxjs.fromEvent(apps[0], "click");
-const clickStream2000 = rxjs.fromEvent(apps[1], "click");
+const apps = document.querySelectorAll('.app');
+const clickStream1000 = rxjs.fromEvent(apps[0], 'click');
+const clickStream2000 = rxjs.fromEvent(apps[1], 'click');
 
 const debouncedStream1000 = clickStream1000.pipe(ops.debounceTime(1000));
 const debouncedStream2000 = clickStream2000.pipe(ops.debounceTime(2000));
@@ -183,21 +192,21 @@ const debouncedStream2000 = clickStream2000.pipe(ops.debounceTime(2000));
 const bufferStream1000 = clickStream1000.pipe(
   ops.buffer(debouncedStream1000),
   ops.map((buf) => buf.length),
-  ops.filter((len) => len >= 2)
+  ops.filter((len) => len >= 2),
 );
 const bufferStream2000 = clickStream2000.pipe(
   ops.buffer(debouncedStream2000),
   ops.map((buf) => buf.length),
-  ops.filter((len) => len >= 2)
+  ops.filter((len) => len >= 2),
 );
 
 bufferStream1000.subscribe(() => {
-  opened1.classList.toggle("hidden");
-  closed1.classList.toggle("hidden");
+  opened1.classList.toggle('hidden');
+  closed1.classList.toggle('hidden');
 });
 bufferStream2000.subscribe(() => {
-  opened2.classList.toggle("hidden");
-  closed2.classList.toggle("hidden");
+  opened2.classList.toggle('hidden');
+  closed2.classList.toggle('hidden');
 });
 ```
 
@@ -213,28 +222,28 @@ bufferStream2000.subscribe(() => {
 </iframe>
 </center>
 
-``` javascript
-const closed = document.getElementById("closed");
-const opened = document.getElementById("opened");
+```javascript
+const closed = document.getElementById('closed');
+const opened = document.getElementById('opened');
 
 const ops = rxjs.operators;
-const clickStream = rxjs.fromEvent(window.app, "click");
+const clickStream = rxjs.fromEvent(window.app, 'click');
 
 const throttledStream = clickStream.pipe(
   ops.throttle(() => rxjs.interval(250), {
     leading: false,
-    trailing: true
-  })
+    trailing: true,
+  }),
 );
 const bufferStream = clickStream.pipe(
   ops.buffer(throttledStream),
   ops.map((buf) => buf.length),
-  ops.filter((len) => len >= 2)
+  ops.filter((len) => len >= 2),
 );
 
 bufferStream.subscribe(() => {
-  opened.classList.toggle("hidden");
-  closed.classList.toggle("hidden");
+  opened.classList.toggle('hidden');
+  closed.classList.toggle('hidden');
 });
 ```
 
@@ -285,48 +294,48 @@ doubleClickStream: -----------e-----------------e----|->
 </iframe>
 </center>
 
-``` javascript
-const closed1 = document.getElementById("closed");
-const opened1 = document.getElementById("opened");
-const closed2 = document.getElementById("closed2");
-const opened2 = document.getElementById("opened2");
+```javascript
+const closed1 = document.getElementById('closed');
+const opened1 = document.getElementById('opened');
+const closed2 = document.getElementById('closed2');
+const opened2 = document.getElementById('opened2');
 
 const ops = rxjs.operators;
-const apps = document.querySelectorAll(".app");
-const clickStream1000 = rxjs.fromEvent(apps[0], "click");
-const clickStream2000 = rxjs.fromEvent(apps[1], "click");
+const apps = document.querySelectorAll('.app');
+const clickStream1000 = rxjs.fromEvent(apps[0], 'click');
+const clickStream2000 = rxjs.fromEvent(apps[1], 'click');
 
 const throttledStream1000 = clickStream1000.pipe(
   ops.throttle(() => rxjs.interval(1000), {
     leading: false,
-    trailing: true
-  })
+    trailing: true,
+  }),
 );
 const throttledStream2000 = clickStream2000.pipe(
   ops.throttle(() => rxjs.interval(2000), {
     leading: false,
-    trailing: true
-  })
+    trailing: true,
+  }),
 );
 
 const bufferStream1000 = clickStream1000.pipe(
   ops.buffer(throttledStream1000),
   ops.map((buf) => buf.length),
-  ops.filter((len) => len >= 2)
+  ops.filter((len) => len >= 2),
 );
 const bufferStream2000 = clickStream2000.pipe(
   ops.buffer(throttledStream2000),
   ops.map((buf) => buf.length),
-  ops.filter((len) => len >= 2)
+  ops.filter((len) => len >= 2),
 );
 
 bufferStream1000.subscribe(() => {
-  opened1.classList.toggle("hidden");
-  closed1.classList.toggle("hidden");
+  opened1.classList.toggle('hidden');
+  closed1.classList.toggle('hidden');
 });
 bufferStream2000.subscribe(() => {
-  opened2.classList.toggle("hidden");
-  closed2.classList.toggle("hidden");
+  opened2.classList.toggle('hidden');
+  closed2.classList.toggle('hidden');
 });
 ```
 
@@ -339,8 +348,8 @@ RxJS 라이브러리를 이용하여 반응형 프로그래밍 패러다임으�
 ## 레퍼런스
 
 The introduction to Reactive Programming you've been missing: [https://gist.github.com/staltz/868e7e9bc2a7b8c1f754](https://gist.github.com/staltz/868e7e9bc2a7b8c1f754)  
-wikipedia - Reactive Programming: [https://en.wikipedia.org/wiki/Reactive\_programming](https://en.wikipedia.org/wiki/Reactive_programming)  
+wikipedia - Reactive Programming: [https://en.wikipedia.org/wiki/Reactive_programming](https://en.wikipedia.org/wiki/Reactive_programming)  
 reactivex - observable: [http://reactivex.io/documentation/ko/observable.html](http://reactivex.io/documentation/ko/observable.html)  
 reactivex - operator: [http://reactivex.io/documentation/ko/operators.html](http://reactivex.io/documentation/ko/operators.html)  
 reactivex - subject: [http://reactivex.io/documentation/ko/subject.html](http://reactivex.io/documentation/ko/subject.html)  
-RxJS - api reference: [https://rxjs-dev.firebaseapp.com/api](https://rxjs-dev.firebaseapp.com/api)  
+RxJS - api reference: [https://rxjs-dev.firebaseapp.com/api](https://rxjs-dev.firebaseapp.com/api)

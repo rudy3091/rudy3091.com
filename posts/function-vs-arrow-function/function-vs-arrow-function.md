@@ -1,8 +1,8 @@
 ---
-title: "함수 vs 화살표 함수"
-slug: "posts/function-vs-arrow-function"
-date: "2021-10-09"
-author: "김현민 @rudy3091"
+title: '함수 vs 화살표 함수'
+slug: 'function-vs-arrow-function'
+date: '2021-10-09'
+author: '김현민 @rudy3091'
 ---
 
 자바스크립트는 ES2015 버전부터 굉장히 많은 변화를 겪었습니다. `arrow function`, 화살표 함수도 그 변화 중 하나입니다. 이번 포스트에서는 화살표 함수와 일반 함수가 어떻게 다른지에 대해 알아본 결과를 공유합니다.
@@ -28,21 +28,21 @@ author: "김현민 @rudy3091"
 
 ### 호이스팅
 
-화살표 함수는 기본적으로 `익명 함수`입니다. 따라서 함수의 선언과 동시에 실행하는 *즉발함수(IIFE)* 가 아닌 이상 변수에 할당해야 호출할 수 있습니다. 따라서 이때의 함수는 어떤 키워드로 변수를 선언하냐에 따라 다른 동작을 보입니다. 변수 키워드에 따른 동작의 차이는 [여기서](https://rudy3091.com/posts/var-let-const) 설명했습니다.
+화살표 함수는 기본적으로 `익명 함수`입니다. 따라서 함수의 선언과 동시에 실행하는 _즉발함수(IIFE)_ 가 아닌 이상 변수에 할당해야 호출할 수 있습니다. 따라서 이때의 함수는 어떤 키워드로 변수를 선언하냐에 따라 다른 동작을 보입니다. 변수 키워드에 따른 동작의 차이는 [여기서](https://rudy3091.com/posts/var-let-const) 설명했습니다.
 
-``` javascript
+```javascript
 // case 1
 foo();
-var foo = () => console.log("foo");
+var foo = () => console.log('foo');
 
 // case 2
 bar();
-const bar = () => console.log("bar");
+const bar = () => console.log('bar');
 
 // case 3
 baz();
 function baz() {
-  console.log("baz");
+  console.log('baz');
 }
 ```
 
@@ -56,16 +56,16 @@ case2 에서 bar 변수는 const 키워드를 이용해 선언되었습니다. c
 
 화살표 함수와 일반 함수의 또다른 차이점으로는 callable & constructable 특성이 있습니다. 화살표 함수와 일반 함수 둘 다 callable 하기 때문에 호출할 수 있지만, 화살표 함수는 constructable 하지 않기 때문에 화살표 함수를 이용해 `함수 객체`를 생성할 수 없습니다. 만약 `new` 키워드를 이용해 화살표 함수로 함수 객체를 생성하려 하면 `TypeError`가 발생합니다.
 
-``` javascript
+```javascript
 function Foo() {
-	console.log(this);
+  console.log(this);
 }
 const f1 = Foo(); // this === window
 const f2 = new Foo(); // this === Foo
 
 const Bar = () => {
-	console.log(this);
-}
+  console.log(this);
+};
 const b1 = Bar(); // this === window
 const b2 = new Bar(); // TypeError: Bar is not constructor
 ```
@@ -74,7 +74,7 @@ const b2 = new Bar(); // TypeError: Bar is not constructor
 
 ### this 바인딩
 
-``` javascript
+```javascript
 function Foo() {
   console.log(this);
 }
@@ -89,7 +89,7 @@ new Foo(); // Foo { }
 
 하지만 화살표 함수는 위에서 언급했듯, this의 local binding이 존재하지 않고, 인접한 렉시컬 환경의 값을 따라갑니다.
 
-``` javascript
+```javascript
 // case 1: 화살표 함수
 const showThis = () => console.log(this);
 
@@ -106,7 +106,9 @@ new Foo(); // Foo { }
 
 // case 3: 일반 함수 내의 일반 함수
 function Bar() {
-  const _showThis = function () { console.log(this); };
+  const _showThis = function () {
+    console.log(this);
+  };
   _showThis();
 }
 
@@ -122,17 +124,17 @@ Foo 함수는 일반 함수이고 위 코드는 non-strict mode에서 실행되�
 
 위 특성에 한가지 예외가 있습니다. 함수 객체 내부에서 메소드로 선언했을 경우입니다.
 
-``` javascript
+```javascript
 function Foo() {
-	this.a = 10;
-	this.bar = function () {
-		console.log(this);
-	}
-	this.bar(); // 출력 1
-	this.baz = () => {
-		console.log(this);
-	}
-	this.baz(); // 출력 2
+  this.a = 10;
+  this.bar = function () {
+    console.log(this);
+  };
+  this.bar(); // 출력 1
+  this.baz = () => {
+    console.log(this);
+  };
+  this.baz(); // 출력 2
 }
 
 const f1 = Foo(); // 메소드로 선언했지만 객체를 생성한게 아니라 this엔 출력 1, 2 모두 window가 바인딩
@@ -145,36 +147,36 @@ const f2 = new Foo(); // 출력 1, 2 둘 다 Foo
 
 이 특성은 콜백 함수에도 비슷하게 적용됩니다.
 
-``` javascript
+```javascript
 function Iam(name) {
   this.name = name;
   this.whoami = function (greetings) {
     return greetings.map(function (greet) {
-      return greet + ", I am " + this.name;
+      return greet + ', I am ' + this.name;
     });
   };
 }
 
-const iam = new Iam("foo");
-console.log(iam.whoami(["Hi", "Hello"])); // ["Hi, I am undefined", "Hello, I am undefined"]
+const iam = new Iam('foo');
+console.log(iam.whoami(['Hi', 'Hello'])); // ["Hi, I am undefined", "Hello, I am undefined"]
 ```
 
 Iam() 함수 내부에서 `whoami`라는 메소드를 선언했습니다. 이때 whoami 메소드는 `Array.prototype.map` 메소드를 이용해 인자로 받은 배열의 원소마다 문자열을 만들어 배열의 형태로 반환합니다. 이 과정에서 map 메소드의 콜백 함수로 일반 함수를 넘겨줬습니다.
 
 이때 **콜백 함수로 전달된 일반 함수의 this는 전역 객체 Window를 가리킵니다**. 따라서 우리가 원한것 처럼 "Hi I am foo" 와 같이 this.name이 나오지 않고 `undefined`가 포함되어 출력됩니다.
 
-``` javascript
+```javascript
 function Iam(name) {
   this.name = name;
   this.whoami = function (greetings) {
     return greetings.map((greet) => {
-      return greet + ", I am " + this.name;
+      return greet + ', I am ' + this.name;
     });
   };
 }
 
-const iam = new Iam("foo");
-console.log(iam.whoami(["Hi", "Hello"])); //["Hi, I am foo", "Hello, I am foo"]
+const iam = new Iam('foo');
+console.log(iam.whoami(['Hi', 'Hello'])); //["Hi, I am foo", "Hello, I am foo"]
 ```
 
 이번에는 콜백 함수로 화살표 함수를 전달했습니다. 화살표 함수는 자신의 this를 가지지 않고 인접한 렉시컬 환경에 바인딩된 this값을 따라가므로, `greetings.map(...)`이 선언된 whoami 메소드의 this를 따라갑니다. 아까 설명했듯 지금과 같이 new 키워드를 사용해 함수 객체를 만들었을 때 메소드 내부에서 this는 자기 자신을 가리키므로, 결국 우리가 원한 대로 "Hi I am foo" 와 같이 출력합니다.
@@ -235,4 +237,4 @@ this 바인딩: [https://github.com/ingong/TodayILearned-JS/blob/main/Readme.md]
 new constructor: [https://grandiose-truffle-638.notion.site/new-46ea9439c00b4a3ab3cf94fe6cc70aeb](https://grandiose-truffle-638.notion.site/new-46ea9439c00b4a3ab3cf94fe6cc70aeb)  
 ES2015 - Function evaluation [https://262.ecma-international.org/6.0/#sec-function-definitions-runtime-semantics-evaluation](https://262.ecma-international.org/6.0/#sec-function-definitions-runtime-semantics-evaluation)  
 mdn Classes: [https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Classes)  
-tistory 블로그 포스트: [https://simsimjae.tistory.com/452](https://simsimjae.tistory.com/452)  
+tistory 블로그 포스트: [https://simsimjae.tistory.com/452](https://simsimjae.tistory.com/452)
