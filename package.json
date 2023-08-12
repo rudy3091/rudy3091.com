@@ -1,43 +1,23 @@
 {
-  "name": "rudy3091",
-  "version": "1.0.0",
+  "name": "rudy3091.com-res",
+  "version": "0.1.0",
   "private": true,
-  "description": "rudy3091",
-  "author": "rudy3091",
-  "keywords": [
-    "gatsby"
-  ],
   "scripts": {
-    "develop": "gatsby develop",
-    "start": "gatsby develop",
-    "build": "gatsby build",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
-    "deploy": "gatsby build --prefix-paths && gh-pages -d public"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
   "dependencies": {
-    "axios": "^1.4.0",
-    "babel-plugin-styled-components": "^1.13.2",
-    "gatsby": "^3.13.0",
-    "gatsby-plugin-react-helmet": "^4.13.0",
-    "gatsby-plugin-react-svg": "^3.0.1",
-    "gatsby-plugin-sharp": "^3.14.0",
-    "gatsby-plugin-sitemap": "^4.9.0",
-    "gatsby-plugin-styled-components": "^4.13.0",
-    "gatsby-remark-images": "^5.11.0",
-    "gatsby-remark-relative-images": "^2.0.2",
-    "gatsby-source-filesystem": "^3.13.0",
-    "gatsby-transformer-remark": "^4.10.0",
-    "gatsby-transformer-sharp": "^3.14.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-helmet": "^6.1.0",
-    "styled-components": "^5.3.1"
+    "@rescript/react": "^0.11.0",
+    "next": "13.4.13",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-markdown": "^8.0.7",
+    "rescript": "^10.1.4",
+    "rescript-webapi": "^0.8.0"
   },
   "devDependencies": {
-    "@types/react-helmet": "^6.1.2",
-    "@types/styled-components": "^5.1.14",
-    "gh-pages": "^3.2.3",
-    "prettier": "^2.8.8"
+    "sass": "^1.64.2"
   }
 }
