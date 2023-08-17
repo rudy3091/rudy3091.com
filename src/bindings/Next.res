@@ -24,6 +24,11 @@ module Head = {
   external make: (~children: React.element) => React.element = "default"
 }
 
+module Image = {
+  @module("next/image") @react.component
+  external make: (~src: string, ~alt: string) => React.element = "default"
+}
+
 module Error = {
   @module("next/error") @react.component
   external make: (~statusCode: int, ~children: React.element) => React.element = "default"
