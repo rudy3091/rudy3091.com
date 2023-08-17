@@ -7,7 +7,7 @@ type t = {
 }
 
 module Service = {
-  let baseUrl = "http://localhost:3000/_posts"
+  let baseUrl = "http://127.0.0.1:3000/_posts"
 
   let getPostContentByTitle = async title => {
     let res = await Next.fetch(`${baseUrl}/${title}/index.md`, {"cache": "force-cache"})
