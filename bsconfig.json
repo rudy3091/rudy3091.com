@@ -14,5 +14,6 @@
   ],
   "jsx": { "version": 4, "mode": "classic" },
   "suffix": ".mjs",
-  "bs-dependencies": ["@rescript/react", "rescript-webapi"]
+  "bs-dependencies": ["@rescript/core", "@rescript/react", "rescript-webapi"],
+  "bsc-flags": ["-open RescriptCore"]
 }
