@@ -14,13 +14,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={font.className}>
-        <AlignCenter>
-          <>
-            <NavigationBar />
-            {children}
-            <AppFooter />
-          </>
-        </AlignCenter>
+        <NavigationBar />
+        <AlignCenter full>{children}</AlignCenter>
+        <AppFooter />
       </body>
     </html>
   );

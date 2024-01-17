@@ -14,14 +14,17 @@ let make = (~postTitles: array<string>) => {
     async () => {
       let frontMatters = await mapFrontMatters(postTitles)
 
-      frontMatters
-      ->Js.Array2.map(fm => {
-        let slug = Slug.fromFrotMatter(fm)
-        <article key={slug}>
-          <Next.Link href={slug}> {fm.title->React.string} </Next.Link>
-        </article>
-      })
-      ->React.array
+      <>
+        <Layout.Spacing size={"3rem"} />
+        {frontMatters
+        ->Js.Array2.map(fm => {
+          let slug = Slug.fromFrotMatter(fm)
+          <article key={slug}>
+            <Next.Link href={slug}> {fm.title->React.string} </Next.Link>
+          </article>
+        })
+        ->React.array}
+      </>
     }
   )()
 }

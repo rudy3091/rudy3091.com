@@ -1,0 +1,10 @@
+.container {
+  display: flex;
+  flex-direction: row;
+
+  @for $i from 1 to 11 {
+    & .width-#{$i} {
+      width: (10% * $i);
+    }
+  }
+}

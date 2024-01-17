@@ -26,7 +26,8 @@ module Head = {
 
 module Image = {
   @module("next/image") @react.component
-  external make: (~src: string, ~alt: string) => React.element = "default"
+  external make: (~src: string, ~alt: string, ~width: string, ~height: string=?) => React.element =
+    "default"
 }
 
 module Error = {
