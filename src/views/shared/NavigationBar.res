@@ -2,7 +2,7 @@
 
 @react.component
 let make = () => {
-  let links = ["Posts", "Memos"]
+  let links = ["/", "Posts"]
   <AlignCenter>
     <nav className={s["container"]}>
       <Layout.Spacing size={"1rem"} />

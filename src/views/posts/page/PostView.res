@@ -7,7 +7,7 @@ let make = (~post) => {
   let trimmedPostContent = FrontMatter.removeFrontMatter(post)
 
   <article className={s["article"]}>
-    <Layout.Spacing size={"3rem"} />
+    <Layout.Spacing size={"5rem"} />
     <PostHeading frontMatter={frontMatter} />
     <ReactMarkdown
       components={{
