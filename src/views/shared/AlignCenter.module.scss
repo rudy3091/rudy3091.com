@@ -1,5 +1,6 @@
 .container {
-  width: 700px;
+  width: min(700px, 100%);
+  word-break: break-all;
   margin: 0 auto;
   display: flex;
   flex-direction: column;

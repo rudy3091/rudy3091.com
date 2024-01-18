@@ -1,3 +1,4 @@
+import "./globals.scss";
 import { Fira_Code } from "next/font/google";
 import { make as AlignCenter } from "@/views/shared/AlignCenter.mjs";
 import { make as NavigationBar } from "@/views/shared/NavigationBar.mjs";
