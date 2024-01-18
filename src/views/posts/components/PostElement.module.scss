@@ -1,0 +1,36 @@
+.h2 {
+  margin: 1.5rem 0;
+}
+
+.p {
+  padding: 1rem 0;
+  line-height: 2rem;
+}
+
+.pre {
+  background-color: #c7c7c7;
+  padding: 1rem;
+  border-radius: 5px;
+  margin: 1rem 0;
+  overflow: scroll;
+
+  & > code {
+    padding: 0;
+  }
+}
+
+.code {
+  background-color: #c7c7c7;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+@media (prefers-color-scheme: dark) {
+  .pre {
+    background-color: #333333;
+  }
+
+  .code {
+    background-color: #333333;
+  }
+}
