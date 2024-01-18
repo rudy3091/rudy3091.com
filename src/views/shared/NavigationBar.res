@@ -5,6 +5,7 @@ let make = () => {
   let links = ["Posts", "Memos"]
   <AlignCenter>
     <nav className={s["container"]}>
+      <Layout.Spacing size={"1rem"} />
       <ul className={s["flex-row"]}>
         {links
         ->Js.Array2.map(link =>

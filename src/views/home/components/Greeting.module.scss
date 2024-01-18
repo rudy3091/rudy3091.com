@@ -1,3 +1,16 @@
+.container * {
+  margin-bottom: 1rem;
+}
+
+.text {
+  display: flex;
+  align-items: center;
+
+  & + * {
+    margin-left: 1rem;
+  }
+}
+
 .bigtext {
   font-size: 1.5rem;
   font-weight: bold;

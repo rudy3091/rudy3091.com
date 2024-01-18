@@ -15,7 +15,7 @@ let make = (~postTitles: array<string>) => {
       let frontMatters = await mapFrontMatters(postTitles)
 
       <>
-        <Layout.Spacing size={"3rem"} />
+        <Layout.Spacing size={"5rem"} />
         {frontMatters
         ->Js.Array2.map(fm => {
           let slug = Slug.fromFrotMatter(fm)
