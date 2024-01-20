@@ -15,5 +15,8 @@
   "jsx": { "version": 4, "mode": "classic" },
   "suffix": ".mjs",
   "bs-dependencies": ["@rescript/core", "@rescript/react"],
-  "bsc-flags": ["-open RescriptCore"]
+  "bsc-flags": ["-open RescriptCore"],
+  "reanalyze": {
+    "suppress": ["src/**/page/*.res"]
+  }
 }
