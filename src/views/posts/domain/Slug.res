@@ -1,3 +1,5 @@
+type t = string
+
 let fromFrotMatter = (fm: FrontMatter.t) => {
-  `posts/${FrontMatter.formatDate(fm.date)}/${fm.slug}`
+  `posts/${FrontMatter.Service.formatDate(fm.date)}/${fm.slug}`
 }

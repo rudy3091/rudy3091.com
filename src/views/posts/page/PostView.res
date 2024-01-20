@@ -3,8 +3,8 @@
 
 @react.component
 let make = (~postContent) => {
-  let frontMatter = FrontMatter.getFrontMatter(postContent)
-  let trimmedPostContent = FrontMatter.removeFrontMatter(postContent)
+  let frontMatter = FrontMatter.Service.fromContent(postContent)
+  let trimmedPostContent = Post.Service.removeFrontMatter(postContent)
 
   <article className={s["article"]}>
     <Layout.Spacing size={"5rem"} />
