@@ -34,21 +34,11 @@ module Job = {
   }
 }
 
-module Location = {
-  @react.component
-  let make = () => {
-    <>
-      <span className={s["text"]}> {"who lives in "->React.string} </span>
-      <span className={s["bigtext"]}> {Introduction.Bio.location->React.string} </span>
-    </>
-  }
-}
-
 module Interest = {
   @react.component
   let make = () => {
     <>
-      <span className={s["text"]}> {"I love "->React.string} </span>
+      <span className={s["text"]}> {"who loves "->React.string} </span>
       <span className={s["bigtext"]}> {Introduction.Bio.interest->React.string} </span>
     </>
   }
@@ -67,7 +57,6 @@ let make = () => {
       <Comma />
     </Layout.Hstack>
     <Layout.Hstack>
-      <And />
       <Interest />
     </Layout.Hstack>
   </div>

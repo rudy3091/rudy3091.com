@@ -5,6 +5,7 @@
 .text {
   display: flex;
   align-items: center;
+  color: #888;
 
   & + * {
     margin-left: 1rem;
@@ -12,6 +13,6 @@
 }
 
 .bigtext {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bold;
 }
