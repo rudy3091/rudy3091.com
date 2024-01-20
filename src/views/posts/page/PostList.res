@@ -20,7 +20,9 @@ let make = async () => {
     ->Js.Array2.map(fm => {
       let slug = Slug.fromFrotMatter(fm)
       <article key={slug}>
-        <Next.Link href={slug}> {fm.title->React.string} </Next.Link>
+        <Next.Link href={slug}>
+          <PostEntryLink date={fm.date} title={fm.title} />
+        </Next.Link>
       </article>
     })
     ->React.array}
