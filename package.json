@@ -20,6 +20,9 @@
     "rescript-webapi": "^0.8.0"
   },
   "devDependencies": {
-    "sass": "^1.64.2"
+    "@types/node": "20.11.5",
+    "@types/react": "18.2.48",
+    "sass": "^1.64.2",
+    "typescript": "5.3.3"
   }
 }
