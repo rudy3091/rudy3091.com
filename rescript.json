@@ -17,6 +17,6 @@
   "bs-dependencies": ["@rescript/core", "@rescript/react"],
   "bsc-flags": ["-open RescriptCore"],
   "reanalyze": {
-    "suppress": ["src/**/page/*.res"]
+    "suppress": ["src/views/posts/page", "src/views/home/page"]
   }
 }

@@ -9,9 +9,10 @@ let mapFrontMatters = async postTitles => {
 }
 
 @react.component
-let make = (~postTitles: array<string>) => {
+let make = () => {
   (
     async () => {
+      let postTitles = Post.Service.getAllPostTitles()
       let frontMatters = await mapFrontMatters(postTitles)
 
       <>

@@ -2,9 +2,9 @@
 @module external s: {..} = "@/views/posts/page/Postview.module.scss"
 
 @react.component
-let make = (~post) => {
-  let frontMatter = FrontMatter.getFrontMatter(post)
-  let trimmedPostContent = FrontMatter.removeFrontMatter(post)
+let make = (~postContent) => {
+  let frontMatter = FrontMatter.getFrontMatter(postContent)
+  let trimmedPostContent = FrontMatter.removeFrontMatter(postContent)
 
   <article className={s["article"]}>
     <Layout.Spacing size={"5rem"} />

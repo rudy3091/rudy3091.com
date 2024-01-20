@@ -1,11 +1,6 @@
 @val external dirname: string = "__dirname"
 @val @scope("process") external env: {..} = "env"
 
-type t = {
-  frontMatter: FrontMatter.t,
-  content: string,
-}
-
 module Service = {
   let baseUrl = "https://raw.githubusercontent.com/rudy3091/rudy3091.com/renewal/public/_posts"
 
