@@ -10,14 +10,14 @@
     "res:build": "rescript build"
   },
   "dependencies": {
-    "@rescript/core": "^0.5.0",
-    "@rescript/react": "^0.12.0-alpha.3",
-    "next": "13.4.13",
+    "@rescript/core": "^1.4.0",
+    "@rescript/react": "^0.12.2",
+    "next": "14.2.4",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-markdown": "^8.0.7",
-    "rescript": "^11.0.0",
-    "rescript-webapi": "^0.8.0"
+    "rescript": "^11.1.1",
+    "rescript-webapi": "^0.9.1"
   },
   "devDependencies": {
     "@types/node": "20.11.5",
