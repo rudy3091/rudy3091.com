@@ -1,10 +1,10 @@
 import "./globals.scss";
-import { Fira_Code } from "next/font/google";
+import { Roboto_Mono } from "next/font/google";
 import { make as AlignCenter } from "@/views/shared/AlignCenter.mjs";
 import { make as NavigationBar } from "@/views/shared/NavigationBar.mjs";
 import { make as AppFooter } from "@/views/shared/AppFooter.mjs";
 
-const font = Fira_Code({ subsets: ["latin"] });
+const font = Roboto_Mono({ subsets: ["latin"], display: "swap" });
 
 export const metadata = {
   title: "loves hacky stuff",
@@ -13,8 +13,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body className={font.className}>
+    <html lang="en" className={font.className}>
+      <body>
         <NavigationBar />
         <AlignCenter full>{children}</AlignCenter>
         <AppFooter />
