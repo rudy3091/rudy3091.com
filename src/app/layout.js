@@ -7,7 +7,7 @@ import { make as AppFooter } from "@/views/shared/AppFooter.mjs";
 const font = Roboto_Mono({ subsets: ["latin"], display: "swap" });
 
 export const metadata = {
-  title: "loves hacky stuff",
+  title: "Hello world",
   description: "personal webpage, https://github.com/rudy3091",
 };
 

@@ -1,63 +1,23 @@
 @module external s: {..} = "@/views/home/components/Greeting.module.scss"
 
-module And = {
-  @react.component
-  let make = () => {
-    <span className={s["text"]}> {" and "->React.string} </span>
-  }
-}
-
-module Comma = {
-  @react.component
-  let make = () => {
-    <span className={s["text"]}> {" , "->React.string} </span>
-  }
-}
-
-module Name = {
-  @react.component
-  let make = () => {
-    <>
-      <span className={s["text"]}> {"Hi, my name is "->React.string} </span>
-      <span className={s["bigtext"]}> {Introduction.Bio.name->React.string} </span>
-    </>
-  }
-}
-
-module Job = {
-  @react.component
-  let make = () => {
-    <>
-      <span className={s["text"]}> {"I am "->React.string} </span>
-      <span className={s["bigtext"]}> {Introduction.Bio.job->React.string} </span>
-    </>
-  }
-}
-
-module Interest = {
-  @react.component
-  let make = () => {
-    <>
-      <span className={s["text"]}> {"who loves "->React.string} </span>
-      <span className={s["bigtext"]}> {Introduction.Bio.interest->React.string} </span>
-    </>
-  }
-}
-
 @react.component
 let make = () => {
   <div className={s["container"]}>
-    <Layout.Hstack>
-      <Name />
-      <Comma />
-    </Layout.Hstack>
-    <Layout.Hstack>
-      <And />
-      <Job />
-      <Comma />
-    </Layout.Hstack>
-    <Layout.Hstack>
-      <Interest />
-    </Layout.Hstack>
+    <div>
+      <span className={s["bigtext"]}> {"Hello world"->React.string} </span>
+    </div>
+    <p className={s["text"]}>
+      {"I am Hyeonmin Kim, a yet another frontend developer who loves hacky stuff. \
+        For me, the world is full of 'unknown's and 'unsolved's."->React.string}
+    </p>
+    <p className={s["text"]}>
+      {"As a developer, I would like to call myself a 'digital explorer' \
+        who explores these unknowns in this infinite world."->React.string}
+    </p>
+    <p className={s["text"]}>
+      {"I love my job and I love to learn new things. \
+        I'm always open to new challenges and opportunities. \
+        Thank you for visiting my page!"->React.string}
+    </p>
   </div>
 }

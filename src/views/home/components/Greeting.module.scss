@@ -1,18 +1,12 @@
 .container * {
   margin-bottom: 1rem;
+  word-break: keep-all;
 }
 
 .text {
-  display: flex;
-  align-items: center;
-  color: #888;
-
-  & + * {
-    margin-left: 1rem;
-  }
+  line-height: 2rem;
 }
 
 .bigtext {
-  font-size: 1.2rem;
-  font-weight: bold;
+  font-size: 1.5rem;
 }
